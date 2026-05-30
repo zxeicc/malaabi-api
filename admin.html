@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملاعبي - لوحة المدير</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="admin-page">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="sidebar-logo">⚽</span>
+      <span class="sidebar-title">ملاعبي</span>
+      <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link active" data-section="dashboard" onclick="showAdminSection('dashboard', this)">
+        <span class="link-icon">📊</span> لوحة التحكم
+      </a>
+      <a class="sidebar-link" data-section="fields" onclick="showAdminSection('fields', this)">
+        <span class="link-icon">🏟️</span> إدارة الملاعب
+      </a>
+      <a class="sidebar-link" data-section="bookings" onclick="showAdminSection('bookings', this)">
+        <span class="link-icon">📋</span> إدارة الحجوزات
+        <span class="sidebar-badge" id="pendingBadge">0</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">م</div>
+        <div>
+          <div class="sidebar-uname" id="sidebarName">المدير</div>
+          <div class="sidebar-urole">مدير الملعب</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">خروج</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <!-- Top bar -->
+    <header class="admin-topbar">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <h2 class="topbar-title" id="topbarTitle">لوحة التحكم</h2>
+      <div class="topbar-right">
+        <span class="topbar-date" id="topbarDate"></span>
+      </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="admin-section active" id="dashboard">
+      <div class="stats-grid">
+        <div class="stat-card stat-blue">
+          <div class="stat-icon">🏟️</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statFields">0</div>
+            <div class="stat-label">إجمالي الملاعب</div>
+          </div>
+        </div>
+        <div class="stat-card stat-green">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statBookings">0</div>
+            <div class="stat-label">إجمالي الحجوزات</div>
+          </div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statPending">0</div>
+            <div class="stat-label">في الانتظار</div>
+          </div>
+        </div>
+        <div class="stat-card stat-purple">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statRevenue">0</div>
+            <div class="stat-label">الأرباح التقريبية (ر.س)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dash-card">
+          <h3 class="dash-card-title">أحدث الحجوزات</h3>
+          <div id="recentBookings"></div>
+        </div>
+        <div class="dash-card">
+          <h3 class="dash-card-title">الملاعب الأكثر حجزاً</h3>
+          <div id="topFields"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fields Management Section -->
+    <section class="admin-section hidden" id="fields">
+      <div class="section-toolbar">
+        <h2>إدارة الملاعب</h2>
+        <button class="btn-primary" onclick="openFieldModal()">+ إضافة ملعب</button>
+      </div>
+      <div class="admin-fields-grid" id="adminFieldsGrid"></div>
+    </section>
+
+    <!-- Bookings Management Section -->
+    <section class="admin-section hidden" id="bookings">
+      <div class="section-toolbar">
+        <h2>إدارة الحجوزات</h2>
+        <div class="booking-filters">
+          <button class="filter-btn active" onclick="filterBookings('all', this)">الكل</button>
+          <button class="filter-btn" onclick="filterBookings('pending', this)">قيد المراجعة</button>
+          <button class="filter-btn" onclick="filterBookings('confirmed', this)">مؤكدة</button>
+          <button class="filter-btn" onclick="filterBookings('cancelled', this)">ملغاة</button>
+        </div>
+      </div>
+      <div class="admin-bookings-list" id="adminBookingsList"></div>
+    </section>
+  </div>
+
+  <!-- Field Modal (Add/Edit) -->
+  <div class="modal-overlay hidden" id="fieldModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2 id="fieldModalTitle">إضافة ملعب جديد</h2>
+        <button class="modal-close" onclick="closeModal('fieldModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fieldId" />
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>اسم الملعب</label>
+            <input type="text" id="fieldName" placeholder="اسم الملعب" />
+          </div>
+          <div class="form-group">
+            <label>الموقع</label>
+            <input type="text" id="fieldLocation" placeholder="الحي / المنطقة" />
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>السعر بالساعة (ر.س)</label>
+            <input type="number" id="fieldPrice" placeholder="150" min="1" />
+          </div>
+          <div class="form-group">
+            <label>نوع الملعب</label>
+            <select id="fieldType">
+              <option value="5v5">5 ضد 5</option>
+              <option value="7v7">7 ضد 7</option>
+              <option value="11v11">11 ضد 11</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>سعة الملعب (لاعب)</label>
+            <input type="number" id="fieldCapacity" placeholder="10" />
+          </div>
+          <div class="form-group">
+            <label>التقييم</label>
+            <input type="number" id="fieldRating" placeholder="4.5" min="1" max="5" step="0.1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>لون البطاقة</label>
+          <div class="color-options" id="colorOptions">
+            <div class="color-opt active" data-color="linear-gradient(135deg,#16a34a,#14532d)" style="background:linear-gradient(135deg,#16a34a,#14532d)" onclick="selectColor('linear-gradient(135deg,#16a34a,#14532d)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#1d4ed8,#1e3a8a)" style="background:linear-gradient(135deg,#1d4ed8,#1e3a8a)" onclick="selectColor('linear-gradient(135deg,#1d4ed8,#1e3a8a)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#dc2626,#7f1d1d)" style="background:linear-gradient(135deg,#dc2626,#7f1d1d)" onclick="selectColor('linear-gradient(135deg,#dc2626,#7f1d1d)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#d97706,#78350f)" style="background:linear-gradient(135deg,#d97706,#78350f)" onclick="selectColor('linear-gradient(135deg,#d97706,#78350f)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#7c3aed,#3b0764)" style="background:linear-gradient(135deg,#7c3aed,#3b0764)" onclick="selectColor('linear-gradient(135deg,#7c3aed,#3b0764)', this)"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>الأوقات المتاحة</label>
+          <div class="time-checkboxes" id="timeCheckboxes"></div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="fieldAvailable" checked /> الملعب متاح للحجز
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('fieldModal')">إلغاء</button>
+        <button class="btn-primary" onclick="saveField()">حفظ الملعب</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Detail Modal -->
+  <div class="modal-overlay hidden" id="bookingDetailModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>تفاصيل الحجز</h2>
+        <button class="modal-close" onclick="closeModal('bookingDetailModal')">✕</button>
+      </div>
+      <div class="modal-body" id="bookingDetailContent"></div>
+      <div class="modal-footer" id="bookingDetailActions"></div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay hidden" id="deleteModal">
+    <div class="modal modal-sm">
+      <div class="confirm-icon">🗑️</div>
+      <h2 class="confirm-title">حذف الملعب؟</h2>
+      <p class="confirm-text">سيتم حذف الملعب وجميع بياناته نهائياً</p>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('deleteModal')">إلغاء</button>
+        <button class="btn-danger" id="confirmDeleteBtn">نعم، احذف</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    let currentUser = null;
+    let selectedColor = 'linear-gradient(135deg,#16a34a,#14532d)';
+    let bookingFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+  currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (!currentUser || !localStorage.getItem('token')) {
+    window.location.href = 'index.html'; return;
+  }
+  document.getElementById('sidebarName').textContent = currentUser.name;
+  document.getElementById('sidebarAvatar').textContent = currentUser.name.charAt(0);
+  document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('ar-SA', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  await updateDashboard();
+});
+
+    function showAdminSection(id, el) {
+      document.querySelectorAll('.admin-section').forEach(s => { s.classList.add('hidden'); s.classList.remove('active'); });
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.getElementById(id).classList.remove('hidden');
+      document.getElementById(id).classList.add('active');
+      if (el) el.classList.add('active');
+      const titles = { dashboard: 'لوحة التحكم', fields: 'إدارة الملاعب', bookings: 'إدارة الحجوزات' };
+      document.getElementById('topbarTitle').textContent = titles[id] || '';
+      if (id === 'fields') renderAdminFields();
+      if (id === 'bookings') renderAdminBookings();
+      if (id === 'dashboard') updateDashboard();
+      // Close sidebar on mobile
+      if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+    }
+
+    async function updateDashboard() {
+  const fields = await getFields();
+  const res = await apiRequest('/bookings');
+  const bookings = res.data || [];
+
+  const pending = bookings.filter(b => b.status === 'pending');
+  const confirmed = bookings.filter(b => b.status === 'confirmed');
+  const revenue = confirmed.reduce((s, b) => s + parseFloat(b.total), 0);
+
+  document.getElementById('statFields').textContent = fields.length;
+  document.getElementById('statBookings').textContent = bookings.length;
+  document.getElementById('statPending').textContent = pending.length;
+  document.getElementById('statRevenue').textContent = revenue.toLocaleString();
+
+  const badge = document.getElementById('pendingBadge');
+  badge.textContent = pending.length;
+  badge.style.display = pending.length > 0 ? 'inline-flex' : 'none';
+
+  // أحدث الحجوزات
+  const recent = bookings.slice(0, 5);
+  document.getElementById('recentBookings').innerHTML = recent.length ? recent.map(b => `
+    <div class="mini-booking">
+      <div class="mini-booking-info">
+        <strong>${b.name}</strong>
+        <span>${b.player_name} — ${b.date} ${b.time_slot}</span>
+      </div>
+      <span class="booking-status status-${b.status}">${statusLabel(b.status)}</span>
+    </div>
+  `).join('') : '<p class="empty-text">لا توجد حجوزات بعد</p>';
+
+  // الملاعب الأكثر حجزاً
+  const fieldCounts = {};
+  bookings.forEach(b => { fieldCounts[b.name] = (fieldCounts[b.name] || 0) + 1; });
+  const topF = Object.entries(fieldCounts).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  document.getElementById('topFields').innerHTML = topF.length ? topF.map(([name, count]) => `
+    <div class="top-field-row">
+      <span class="top-field-name">${name}</span>
+      <div class="top-field-bar-wrap"><div class="top-field-bar" style="width:${Math.min(count * 20, 100)}%"></div></div>
+      <span class="top-field-count">${count}</span>
+    </div>
+  `).join('') : '<p class="empty-text">لا توجد بيانات بعد</p>';
+}
+
+    function updatePendingBadge() {
+      const count = getBookings().filter(b => b.status === 'pending').length;
+      const badge = document.getElementById('pendingBadge');
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-flex' : 'none';
+    }
+
+    async function renderAdminFields() {
+  const grid = document.getElementById('adminFieldsGrid');
+  grid.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+  const fields = await getFields();
+  window.allAdminFields = fields;
+  if (!fields.length) { grid.innerHTML = '<div class="empty-state">لا توجد ملاعب. أضف ملعبك الأول!</div>'; return; }
+  grid.innerHTML = fields.map(f => `
+    <div class="admin-field-card">
+      <div class="admin-field-header" style="background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}">
+        <span class="field-badge">${f.type}</span>
+        <span class="field-status ${f.available ? 'available' : 'unavailable'}">${f.available ? 'متاح' : 'مغلق'}</span>
+      </div>
+      <div class="admin-field-body">
+        <h3>${f.name}</h3>
+        <p>📍 ${f.location}</p>
+        <p>💰 ${f.price_per_hour} ر.س/ساعة | 👥 ${f.capacity} لاعب</p>
+        <p>⭐ ${f.rating}</p>
+      </div>
+      <div class="admin-field-footer">
+        <button class="btn-outline btn-sm" onclick="editField(${f.id})">تعديل</button>
+        <button class="btn-danger btn-sm" onclick="deleteField(${f.id})">حذف</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+    async function renderAdminBookings(filter = 'all') {
+  const list = document.getElementById('adminBookingsList');
+  list.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+  const res = await apiRequest('/bookings');
+  let bookings = res.data || [];
+  window.allBookings = bookings;
+  if (filter !== 'all') bookings = bookings.filter(b => b.status === filter);
+  if (!bookings.length) { list.innerHTML = '<div class="empty-state">لا توجد حجوزات</div>'; return; }
+  list.innerHTML = bookings.map(b => `
+    <div class="admin-booking-row">
+      <div class="booking-color-bar" style="background:#16a34a"></div>
+      <div class="admin-booking-info">
+        <div class="booking-head">
+          <strong>${b.name}</strong>
+          <span class="booking-status status-${b.status}">${statusLabel(b.status)}</span>
+        </div>
+        <div class="booking-details">
+          <span>👤 ${b.player_name}</span>
+          <span>📅 ${b.date}</span>
+          <span>⏰ ${b.time_slot}</span>
+          <span>⏱ ${b.duration} ساعة</span>
+          <span>💰 ${b.total} ر.س</span>
+        </div>
+      </div>
+      <div class="admin-booking-actions">
+        <button class="btn-outline btn-sm" onclick="viewBooking(${b.id})">التفاصيل</button>
+        ${b.status === 'pending' ? `
+          <button class="btn-success btn-sm" onclick="changeBookingStatus(${b.id}, 'confirmed')">✓ قبول</button>
+          <button class="btn-danger btn-sm" onclick="changeBookingStatus(${b.id}, 'rejected')">✗ رفض</button>
+        ` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+    function filterBookings(filter, btn) {
+      bookingFilter = filter;
+      document.querySelectorAll('.booking-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAdminBookings(filter);
+    }
+async function changeBookingStatus(id, status) {
+  const data = await apiRequest(`/bookings/${id}/status`, 'PUT', { status });
+  if (data.success) {
+    showToast(status === 'confirmed' ? 'تم قبول الحجز' : 'تم رفض الحجز', status === 'confirmed' ? 'success' : 'error');
+    await renderAdminBookings(bookingFilter);
+    await updateDashboard();
+  }
+}
+
+    function viewBooking(id) {
+  const b = window.allBookings.find(b => b.id === id);
+  if (!b) return;
+  document.getElementById('bookingDetailContent').innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-row"><span>الملعب:</span><strong>${b.name}</strong></div>
+      <div class="detail-row"><span>اللاعب:</span><strong>${b.player_name}</strong></div>
+      <div class="detail-row"><span>التاريخ:</span><strong>${b.date}</strong></div>
+      <div class="detail-row"><span>الوقت:</span><strong>${b.time_slot}</strong></div>
+      <div class="detail-row"><span>المدة:</span><strong>${b.duration} ساعة</strong></div>
+      <div class="detail-row total"><span>الإجمالي:</span><strong>${b.total} ر.س</strong></div>
+      <div class="detail-row"><span>الحالة:</span><span class="booking-status status-${b.status}">${statusLabel(b.status)}</span></div>
+    </div>
+  `;
+  document.getElementById('bookingDetailActions').innerHTML = b.status === 'pending' ? `
+    <button class="btn-secondary" onclick="closeModal('bookingDetailModal')">إغلاق</button>
+    <button class="btn-success" onclick="changeBookingStatus(${b.id},'confirmed'); closeModal('bookingDetailModal')">قبول</button>
+    <button class="btn-danger" onclick="changeBookingStatus(${b.id},'rejected'); closeModal('bookingDetailModal')">رفض</button>
+  ` : `<button class="btn-primary btn-full" onclick="closeModal('bookingDetailModal')">إغلاق</button>`;
+  document.getElementById('bookingDetailModal').classList.remove('hidden');
+}
+
+    function openFieldModal(field = null) {
+  document.getElementById('fieldId').value = field ? field.id : '';
+  document.getElementById('fieldName').value = field ? field.name : '';
+  document.getElementById('fieldLocation').value = field ? field.location : '';
+  document.getElementById('fieldPrice').value = field ? field.price_per_hour : '';
+  document.getElementById('fieldType').value = field ? field.type : '5v5';
+  document.getElementById('fieldCapacity').value = field ? field.capacity : '';
+  document.getElementById('fieldRating').value = field ? field.rating : '4.5';
+  document.getElementById('fieldAvailable').checked = field ? field.available : true;
+  document.getElementById('fieldModalTitle').textContent = field ? 'تعديل الملعب' : 'إضافة ملعب جديد';
+  
+  // ✅ ارسم الأوقات
+  renderTimeCheckboxes(field ? (field.timeSlots || []) : []);
+  
+  if (field) {
+    selectedColor = field.color;
+    document.querySelectorAll('.color-opt').forEach(c => c.classList.toggle('active', c.dataset.color === field.color));
+  }
+  document.getElementById('fieldModal').classList.remove('hidden');
+}
+
+    async function saveField() {
+  const id = document.getElementById('fieldId').value;
+  const timeSlots = [...document.querySelectorAll('[name="fieldTime"]:checked')].map(cb => cb.value);
+  const field = {
+    name: document.getElementById('fieldName').value,
+    location: document.getElementById('fieldLocation').value,
+    price_per_hour: parseFloat(document.getElementById('fieldPrice').value) || 150,
+    type: document.getElementById('fieldType').value,
+    capacity: parseInt(document.getElementById('fieldCapacity').value) || 10,
+    rating: parseFloat(document.getElementById('fieldRating').value) || 4.5,
+    available: document.getElementById('fieldAvailable').checked,
+    color: selectedColor,
+    timeSlots
+  };
+  if (!field.name || !field.location) { showToast('الرجاء إدخال الاسم والموقع', 'error'); return; }
+  const data = id
+    ? await apiRequest(`/fields/${id}`, 'PUT', field)
+    : await apiRequest('/fields', 'POST', field);
+  if (data.success || data.id) {
+    closeModal('fieldModal');
+    await renderAdminFields();
+    await updateDashboard();
+    showToast(id ? 'تم تعديل الملعب' : 'تم إضافة الملعب', 'success');
+  }
+}
+
+function editField(id) {
+
+  const field = window.allAdminFields.find(f => f.id === id);
+  openFieldModal(field);
+}
+function renderTimeCheckboxes(selectedSlots = []) {
+  const times = ['06:00','07:00','08:00','09:00','10:00','11:00','12:00',
+                 '13:00','14:00','15:00','16:00','17:00','18:00','19:00',
+                 '20:00','21:00','22:00','23:00'];
+  document.getElementById('timeCheckboxes').innerHTML = times.map(t => `
+    <label class="time-check-label">
+      <input type="checkbox" value="${t}" name="fieldTime" ${selectedSlots.includes(t) ? 'checked' : ''} /> ${t}
+    </label>
+  `).join('');
+}
+function deleteField(id) {
+  document.getElementById('deleteModal').classList.remove('hidden');
+  document.getElementById('confirmDeleteBtn').onclick = async () => {
+    const data = await apiRequest(`/fields/${id}`, 'DELETE');
+    console.log('delete response:', data); // ← هنا الصح
+    if (data.success) {
+      closeModal('deleteModal');
+      await renderAdminFields();
+      await updateDashboard();
+      showToast('تم حذف الملعب', 'success');
+    } else {
+      showToast(data.message || 'حدث خطأ', 'error');
+    }
+  };
+}
+
+    function selectColor(color, el) {
+      selectedColor = color;
+      document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('currentUser');
+  window.location.href = 'index.html';
+}
+    function statusLabel(s) { return { pending: 'قيد المراجعة', confirmed: 'مؤكد', cancelled: 'ملغي', rejected: 'مرفوض' }[s] || s; }
+  </script>
+</body>
+</html>

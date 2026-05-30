@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملاعبي - صفحة اللاعب</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="player-page">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-logo">⚽</span>
+      <span class="nav-title">ملاعبي</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#fields" class="nav-link active" onclick="showSection('fields', this)">الملاعب</a>
+      <a href="#mybookings" class="nav-link" onclick="showSection('mybookings', this)">حجوزاتي</a>
+    </div>
+    <div class="nav-user">
+      <div class="user-avatar" id="userAvatar">أ</div>
+      <span class="user-name" id="userName">اللاعب</span>
+      <button class="btn-logout" onclick="logout()">خروج</button>
+    </div>
+  </nav>
+
+  <!-- Fields Section -->
+  <section class="section active" id="fields">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">الملاعب المتاحة</h1>
+        <p class="section-sub">ابحث عن ملعبك المثالي واحجز الآن</p>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="🔍  ابحث عن ملعب..." oninput="filterFields()" />
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <button class="filter-btn active" onclick="filterByType('all', this)">الكل</button>
+      <button class="filter-btn" onclick="filterByType('5v5', this)">5 ضد 5</button>
+      <button class="filter-btn" onclick="filterByType('7v7', this)">7 ضد 7</button>
+      <button class="filter-btn" onclick="filterByType('11v11', this)">11 ضد 11</button>
+    </div>
+
+    <div class="fields-grid" id="fieldsGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- My Bookings Section -->
+  <section class="section hidden" id="mybookings">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">حجوزاتي</h1>
+        <p class="section-sub">إدارة جميع حجوزاتك</p>
+      </div>
+    </div>
+    <div class="bookings-list" id="myBookingsList">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- Booking Modal -->
+  <div class="modal-overlay hidden" id="bookingModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalFieldName">حجز ملعب</h2>
+        <button class="modal-close" onclick="closeModal('bookingModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-modal-info" id="modalFieldInfo"></div>
+        <div class="form-group">
+          <label>📅 اختر التاريخ</label>
+          <input type="date" id="bookingDate" min="" />
+        </div>
+        <div class="form-group">
+          <label>⏰ اختر الوقت المتاح</label>
+          <div class="time-slots" id="timeSlots"></div>
+        </div>
+        <div class="form-group">
+          <label>⏱ مدة الحجز</label>
+          <div class="duration-select">
+            <button class="duration-btn active" data-hours="1" onclick="selectDuration(1, this)">ساعة</button>
+            <button class="duration-btn" data-hours="2" onclick="selectDuration(2, this)">ساعتان</button>
+            <button class="duration-btn" data-hours="3" onclick="selectDuration(3, this)">3 ساعات</button>
+          </div>
+        </div>
+        <div class="booking-summary" id="bookingSummary">
+          <div class="summary-row"><span>الملعب:</span><span id="sumField">-</span></div>
+          <div class="summary-row"><span>التاريخ:</span><span id="sumDate">-</span></div>
+          <div class="summary-row"><span>الوقت:</span><span id="sumTime">-</span></div>
+          <div class="summary-row"><span>المدة:</span><span id="sumDuration">-</span></div>
+          <div class="summary-row total"><span>الإجمالي:</span><span id="sumTotal">-</span></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('bookingModal')">إلغاء</button>
+        <button class="btn-primary" onclick="confirmBooking()">احجز الآن ⚽</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay hidden" id="confirmModal">
+    <div class="modal modal-sm">
+      <div class="confirm-icon">✅</div>
+      <h2 class="confirm-title">تم الحجز بنجاح!</h2>
+      <p class="confirm-text" id="confirmText"></p>
+      <button class="btn-primary btn-full" onclick="closeModal('confirmModal'); showSection('mybookings', null)">عرض حجوزاتي</button>
+    </div>
+  </div>
+
+  <!-- Cancel Confirm Modal -->
+  <div class="modal-overlay hidden" id="cancelModal">
+    <div class="modal modal-sm">
+      <div class="confirm-icon">⚠️</div>
+      <h2 class="confirm-title">إلغاء الحجز؟</h2>
+      <p class="confirm-text">هل أنت متأكد من إلغاء هذا الحجز؟</p>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('cancelModal')">لا، ارجع</button>
+        <button class="btn-danger" id="confirmCancelBtn">نعم، ألغِ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    let currentUser = null;
+    let selectedField = null;
+    let selectedTime = null;
+    let selectedDuration = 1;
+    let cancelBookingId = null;
+    let currentFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+  currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if (!currentUser || !localStorage.getItem('token')) {
+    window.location.href = 'index.html'; return;
+  }
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userAvatar').textContent = currentUser.name.charAt(0);
+  await renderFields();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('bookingDate').min = today;
+  document.getElementById('bookingDate').value = today;
+  document.getElementById('bookingDate').addEventListener('change', updateTimeSlots);
+});
+
+    function showSection(id, el) {
+      document.querySelectorAll('.section').forEach(s => { s.classList.add('hidden'); s.classList.remove('active'); });
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      document.getElementById(id).classList.remove('hidden');
+      document.getElementById(id).classList.add('active');
+      if (el) el.classList.add('active');
+      if (id === 'mybookings') renderMyBookings();
+    }
+
+    async function renderFields(filter = '') {
+  const grid = document.getElementById('fieldsGrid');
+  grid.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+  const fields = await getFields();
+  window.allFields = fields;
+  let filtered = fields.filter(f =>
+    (f.name.includes(filter) || f.location.includes(filter)) &&
+    (currentFilter === 'all' || f.type === currentFilter)
+  );
+  if (!filtered.length) { grid.innerHTML = '<div class="empty-state">لا توجد ملاعب</div>'; return; }
+  grid.innerHTML = filtered.map(f => `
+    <div class="field-card">
+      <div class="field-img" style="background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}">
+        <div class="field-img-inner"><div class="field-lines"></div><span class="field-img-icon">🏟️</span></div>
+        <span class="field-badge">${f.type}</span>
+        <span class="field-status ${f.available ? 'available' : 'unavailable'}">${f.available ? 'متاح' : 'مغلق'}</span>
+      </div>
+      <div class="field-content">
+        <h3 class="field-name">${f.name}</h3>
+        <p class="field-location">📍 ${f.location}</p>
+        <div class="field-meta">
+          <span class="field-rating">⭐ ${f.rating}</span>
+          <span class="field-size">👥 ${f.capacity} لاعب</span>
+        </div>
+        <div class="field-footer">
+          <div class="field-price"><span class="price-num">${f.price_per_hour}</span> ر.س/ساعة</div>
+          <button class="btn-book ${!f.available ? 'disabled' : ''}"
+            onclick="${f.available ? `openBooking(${f.id})` : 'void(0)'}"
+            ${!f.available ? 'disabled' : ''}>
+            ${f.available ? 'احجز الآن' : 'غير متاح'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+    function filterFields() {
+      renderFields(document.getElementById('searchInput').value);
+    }
+
+    function filterByType(type, btn) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderFields(document.getElementById('searchInput').value);
+    }
+
+    function openBooking(fieldId) {
+  selectedField = window.allFields.find(f => f.id === fieldId);
+  if (!selectedField) return;
+  selectedTime = null;
+  selectedDuration = 1;
+  document.querySelectorAll('.duration-btn').forEach(b => b.classList.toggle('active', b.dataset.hours === '1'));
+  document.getElementById('modalFieldName').textContent = selectedField.name;
+  document.getElementById('modalFieldInfo').innerHTML = `
+    <div class="field-mini-info">
+      <span>📍 ${selectedField.location}</span>
+      <span>💰 ${selectedField.price_per_hour} ر.س/ساعة</span>
+      <span>👥 ${selectedField.capacity} لاعب</span>
+    </div>`;
+  updateSummary();
+  updateTimeSlots();
+  document.getElementById('bookingModal').classList.remove('hidden');
+}
+
+   function updateTimeSlots() {
+  const slots = selectedField?.timeSlots || [];
+  document.getElementById('timeSlots').innerHTML = slots.map(t =>
+    `<button class="time-slot" onclick="selectTime('${t}', this)">${t}</button>`
+  ).join('');
+}
+
+    function selectTime(time, btn) {
+      selectedTime = time;
+      document.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      updateSummary();
+    }
+
+    function selectDuration(hours, btn) {
+      selectedDuration = hours;
+      document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateSummary();
+    }
+
+function updateSummary() {
+  if (!selectedField) return;
+  document.getElementById('sumField').textContent = selectedField.name;
+  document.getElementById('sumDate').textContent = document.getElementById('bookingDate').value || '-';
+  document.getElementById('sumTime').textContent = selectedTime || '-';
+  document.getElementById('sumDuration').textContent = selectedDuration + ' ساعة';
+  document.getElementById('sumTotal').textContent = selectedTime ? (selectedField.price_per_hour * selectedDuration) + ' ر.س' : '-';
+}
+
+    async function confirmBooking() {
+  if (!selectedTime) { showToast('الرجاء اختيار وقت الحجز', 'error'); return; }
+  const date = document.getElementById('bookingDate').value;
+  if (!date) { showToast('الرجاء اختيار التاريخ', 'error'); return; }
+  const data = await createBooking(selectedField.id, date, selectedTime, selectedDuration);
+  if (data.id) {
+    closeModal('bookingModal');
+    document.getElementById('confirmText').textContent = `تم حجز ${selectedField.name} بتاريخ ${date} الساعة ${selectedTime}`;
+    document.getElementById('confirmModal').classList.remove('hidden');
+  } else {
+    showToast(data.message || 'حدث خطأ في الحجز', 'error');
+  }
+}
+
+    async function renderMyBookings() {
+  const list = document.getElementById('myBookingsList');
+  list.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+  const bookings = await getMyBookings();
+  if (!bookings.length) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><p>لا توجد حجوزات بعد</p></div>`;
+    return;
+  }
+  list.innerHTML = bookings.map(b => `
+    <div class="booking-card">
+      <div class="booking-color-bar" style="background:#16a34a"></div>
+      <div class="booking-info">
+        <div class="booking-head">
+          <h3>${b.name}</h3>
+          <span class="booking-status status-${b.status}">${statusLabel(b.status)}</span>
+        </div>
+        <div class="booking-details">
+          <span>📍 ${b.location}</span>
+          <span>📅 ${b.date}</span>
+          <span>⏰ ${b.time_slot}</span>
+          <span>⏱ ${b.duration} ساعة</span>
+        </div>
+        <div class="booking-total">الإجمالي: <strong>${b.total} ر.س</strong></div>
+      </div>
+      <div class="booking-actions">
+        ${b.status === 'pending' || b.status === 'confirmed' ?
+          `<button class="btn-danger btn-sm" onclick="handleCancelBooking(${b.id})">إلغاء</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+    function handleCancelBooking(id) {
+  document.getElementById('cancelModal').classList.remove('hidden');
+  document.getElementById('confirmCancelBtn').onclick = async () => {
+    const data = await cancelBooking(id);
+    closeModal('cancelModal');
+    if (data.success) { showToast('تم إلغاء الحجز', 'success'); renderMyBookings(); }
+    else { showToast(data.message || 'حدث خطأ', 'error'); }
+  };
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('currentUser');
+  window.location.href = 'index.html';
+}
+
+    function statusLabel(s) {
+      return { pending: 'قيد المراجعة', confirmed: 'مؤكد', cancelled: 'ملغي', rejected: 'مرفوض' }[s] || s;
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    
+  </script>
+</body>
+</html>

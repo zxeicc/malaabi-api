@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ملاعبي - منصة حجز الملاعب</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="auth-page">
+
+  <!-- Background -->
+  <div class="auth-bg">
+    <div class="auth-bg-grid"></div>
+    <div class="auth-bg-glow"></div>
+    <div class="pitch-lines">
+      <div class="pitch-center-circle"></div>
+      <div class="pitch-line pitch-mid"></div>
+      <div class="pitch-line pitch-box-top"></div>
+      <div class="pitch-line pitch-box-bottom"></div>
+    </div>
+  </div>
+
+  <!-- Main Auth Container -->
+  <div class="auth-container">
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="logo-icon">⚽</div>
+      <div class="logo-text">
+        <span class="logo-main">ملاعبي</span>
+        <span class="logo-sub">منصة حجز الملاعب</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login" onclick="switchTab('login')">تسجيل الدخول</button>
+      <button class="auth-tab" data-tab="register" onclick="switchTab('register')">إنشاء حساب</button>
+    </div>
+
+    <!-- Login Form -->
+    <div class="auth-form-wrapper" id="loginForm">
+      <form class="auth-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>البريد الإلكتروني أو اسم المستخدم</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="text" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required />
+          </div>
+        </div>
+
+        <div class="form-row-between">
+          <label class="checkbox-label">
+            <input type="checkbox" /> تذكرني
+          </label>
+          <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
+        </div>
+
+        <button type="submit" class="btn-primary btn-full">دخول كلاعب</button>
+
+        <div class="divider"><span>أو</span></div>
+
+        <button type="button" class="btn-outline btn-full" onclick="loginAsAdmin()">دخول كمدير ملعب</button>
+        
+        <p class="auth-hint">للتجربة: اللاعب (player@test.com / 123456) | المدير (admin@test.com / admin123)</p>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div class="auth-form-wrapper hidden" id="registerForm">
+      <form class="auth-form" onsubmit="handleRegister(event)">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>الاسم الأول</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="regFirstName" placeholder="الاسم الأول" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>اسم العائلة</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="regLastName" placeholder="اسم العائلة" required />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>رقم الجوال</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📱</span>
+            <input type="tel" id="regPhone" placeholder="05xxxxxxxx" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="regPassword" placeholder="كلمة المرور (6 أحرف على الأقل)" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>نوع الحساب</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🎯</span>
+            <select id="regRole">
+              <option value="player">لاعب</option>
+              <option value="admin">مدير ملعب</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary btn-full">إنشاء الحساب</button>
+      </form>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+      document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+    }
+
+    async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const pass = document.getElementById('loginPassword').value;
+
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+      window.location.href = data.user.role === 'admin' ? 'admin.html' : 'player.html';
+    } else {
+      showToast(data.message || 'بيانات خاطئة', 'error');
+    }
+  } catch (err) {
+    showToast('تعذر الاتصال بالسيرفر', 'error');
+  }
+}
+    async function loginAsAdmin() {
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'admin@malaabi.com', password: '123456' })
+    });
+    const data = await res.json();
+
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+      window.location.href = 'admin.html';
+    } else {
+      showToast('تعذر الدخول كمدير', 'error');
+    }
+  } catch (err) {
+    showToast('تعذر الاتصال بالسيرفر', 'error');
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  
+  const name = document.getElementById('regFirstName').value + ' ' + document.getElementById('regLastName').value;
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  const role = document.getElementById('regRole').value;
+  const phone = document.getElementById('regPhone').value;
+
+  try {
+    const res = await fetch('http://localhost:5000/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, role, phone })
+    });
+    const data = await res.json();
+    console.log('response:', data);
+
+    if (data.userId) {
+      showToast('تم إنشاء الحساب! سجل دخولك الآن', 'success');
+      setTimeout(() => switchTab('login'), 1000);
+    } else {
+      showToast(data.message || 'حدث خطأ', 'error');
+    }
+  } catch (err) {
+    showToast('تعذر الاتصال بالسيرفر', 'error');
+  }
+}
+
+  </script>
+</body>
+</html>
