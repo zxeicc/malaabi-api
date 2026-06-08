@@ -12,6 +12,11 @@ app.use(express.json());
 app.get("/",(req,res)=>{
     res.send("api is working")
 })
+const path = require("path");
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
+});
 app.use('/api/bookings', bookingsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/fields",fieldsRoute)
