@@ -1,4 +1,15 @@
-require("dotenv").config()
+require("dotenv").config();
+const mysql = require("mysql2/promise");
+
+// استخدم MYSQL_URL أو DATABASE_URL
+const db = mysql.createPool(process.env.MYSQL_URL || process.env.DATABASE_URL);
+
+// اختبار الاتصال
+db.getConnection()
+  .then(() => console.log("✅ Database connected successfully"))
+  .catch((err) => console.error("❌ DB connection error:", err));
+
+module.exports = db;/*require("dotenv").config()
 const mysql = require("mysql2/promise");
 
 const db = mysql.createPool({
@@ -13,4 +24,4 @@ db.getConnection()
     .catch(err => console.log(err))
 ;
 
-module.exports = db;
+module.exports = db;*/

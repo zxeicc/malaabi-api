@@ -9,14 +9,11 @@ const authRoutes = require("./routes/authRoutes");
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.get("/",(req,res)=>{
-    res.send("api is working")
-})
+
 const path = require("path");
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-});
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use('/api/bookings', bookingsRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/fields",fieldsRoute)
