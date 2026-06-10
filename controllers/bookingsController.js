@@ -1,5 +1,5 @@
 const db = require("../config/db")
-
+const transporter = require("../config/mailler")
 // add new booking
 exports.createBooking = async (req, res) => {
   try {
