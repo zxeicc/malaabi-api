@@ -1,15 +1,5 @@
 const db = require("../config/db")
-const nodemailer = require("nodemailer")
- 
-// email transporter
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-})
- 
+
 // add new booking
 exports.createBooking = async (req, res) => {
   try {
