@@ -132,6 +132,7 @@
 
   <script src="app.js"></script>
   <script>
+    const API = "https://malaabi-api-production.up.railway.app";
     function switchTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
@@ -145,7 +146,7 @@
   const pass = document.getElementById('loginPassword').value;
 
   try {
-    const res = await fetch('http://localhost:5000/api/auth/login', {
+    const res = await fetch(`${API}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password: pass })
@@ -165,7 +166,7 @@
 }
     async function loginAsAdmin() {
   try {
-    const res = await fetch('http://localhost:5000/api/auth/login', {
+    const res = await fetch(`${API}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: 'admin@malaabi.com', password: '123456' })
@@ -195,7 +196,7 @@ async function handleRegister(e) {
   const phone = document.getElementById('regPhone').value;
 
   try {
-    const res = await fetch('http://localhost:5000/api/auth/register', {
+    const res = await fetch(`${API}/api/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password, role, phone })
