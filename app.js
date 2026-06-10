@@ -2,7 +2,7 @@
 // app.js — Shared utilities & API connection
 // =============================================
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://malaabi-api-production.up.railway.app/api';
 
 // ---------- TOKEN ----------
 function getToken() {
