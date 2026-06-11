@@ -10,6 +10,7 @@ const transporter = nodemailer.createTransport({
 
 // ✅ اختبار الاتصال
 transporter.verify((err, success) => {
+     console.log('verify called');
     if (err) {console.log('Email error:', err.message);
     console.log('Full error:', JSON.stringify(err));
     }else console.log('Email ready ✅');
