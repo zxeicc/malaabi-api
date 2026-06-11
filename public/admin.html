@@ -716,7 +716,8 @@ async function saveField() {
       return;
     }
 
-    const response = await fetch(id ? `/fields/${id}` : '/fields', {
+// ✅ صحيح
+const response = await fetch(id ? `${API}/api/fields/${id}` : `${API}/api/fields`, {
       method: id ? 'PUT' : 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`

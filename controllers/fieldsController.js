@@ -20,23 +20,49 @@ const getFields = async (req, res) => {
 };
 
 // POST — إضافة ملعب
+// POST
 const createField = async (req, res) => {
-  const { name, location, price_per_hour, type, capacity, rating, available, color, timeSlots } = req.body;
+  const { name, location, price_per_hour, type, capacity, rating, available, color, timeSlots, image } = req.body;
   try {
     const [result] = await db.query(
-      `INSERT INTO fields (name, location, price_per_hour, type, capacity, rating, available, color)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, location, price_per_hour, type, capacity, rating ?? 4.5, available ?? true, color]
+      `INSERT INTO fields (name, location, price_per_hour, type, capacity, rating, available, color, image)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, location, price_per_hour, type, capacity, rating ?? 4.5, available ?? true, color, image || null]
     );
 
     const fieldId = result.insertId;
-
     if (timeSlots && timeSlots.length > 0) {
-      const slotValues = timeSlots.map(t => [fieldId, t]);
+      const slots = typeof timeSlots === 'string' ? JSON.parse(timeSlots) : timeSlots;
+      const slotValues = slots.map(t => [fieldId, t]);
       await db.query('INSERT INTO field_time_slots (field_id, time_slot) VALUES ?', [slotValues]);
     }
 
     res.status(201).json({ success: true, message: 'تم إضافة الملعب', id: fieldId });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// PUT
+const updateField = async (req, res) => {
+  const { name, location, price_per_hour, type, capacity, rating, available, color, timeSlots, image } = req.body;
+  try {
+    await db.query(
+      `UPDATE fields SET name=?, location=?, price_per_hour=?, type=?, capacity=?,
+      rating=?, available=?, color=?, image=? WHERE id=?`,
+      [name, location, price_per_hour, type, capacity, rating, available, color, image || null, req.params.id]
+    );
+
+    if (timeSlots) {
+      const slots = typeof timeSlots === 'string' ? JSON.parse(timeSlots) : timeSlots;
+      await db.query('DELETE FROM field_time_slots WHERE field_id = ?', [req.params.id]);
+      if (slots.length > 0) {
+        const slotValues = slots.map(t => [req.params.id, t]);
+        await db.query('INSERT INTO field_time_slots (field_id, time_slot) VALUES ?', [slotValues]);
+      }
+    }
+
+    res.json({ success: true, message: 'تم تعديل الملعب' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
