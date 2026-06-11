@@ -10,9 +10,11 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-transporter.verify((err, success) => {
-  if (err) console.log('Email error:', err.message);
-  else console.log('Email ready ✅');
-});
+setTimeout(() => {
+  transporter.verify((err, success) => {
+    if (err) console.log('Email error:', err.message);
+    else console.log('Email ready ✅');
+  });
+}, 3000);
 
 module.exports = transporter;
