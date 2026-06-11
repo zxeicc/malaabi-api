@@ -173,8 +173,12 @@
   if (!filtered.length) { grid.innerHTML = '<div class="empty-state">لا توجد ملاعب</div>'; return; }
   grid.innerHTML = filtered.map(f => `
     <div class="field-card">
-      <div class="field-img" style="background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}">
-        <div class="field-img-inner"><div class="field-lines"></div><span class="field-img-icon">🏟️</span></div>
+// بعد
+<div class="field-img" style="${f.image ? '' : `background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}`}">
+  ${f.image 
+    ? `<img src="${f.image}" alt="${f.name}" style="width:100%;height:100%;object-fit:cover;" />`
+    : `<div class="field-img-inner"><div class="field-lines"></div><span class="field-img-icon">🏟️</span></div>`
+  }
         <span class="field-badge">${f.type}</span>
         <span class="field-status ${f.available ? 'available' : 'unavailable'}">${f.available ? 'متاح' : 'مغلق'}</span>
       </div>
