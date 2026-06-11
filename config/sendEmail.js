@@ -3,7 +3,7 @@ const transporter = require('./mailer');
 async function sendBookingEmail(to, subject, html) {
   try {
     await transporter.sendMail({
-      from: `"ملاعبي" <${process.env.EMAIL_USER}>`,
+      from: `"ملاعبي" <${process.env.BREVO_USER}>`,
       to,
       subject,
       html
