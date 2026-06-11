@@ -71,8 +71,8 @@ exports.updateBookingStatus = async (req, res) => {
       console.log("Sending email to:", b.player_email, "status:", status)
       if (status === "confirmed") {
         
-    // const date = String(b.date).split("T")[0]
-        await sendBookingEmail(b.player_email, "✅ تم قبول حجزك في ملاعبي", confirmedEmail(b.player_name, b.field_name, b.date.split('T')[0], b.time_slot))
+    const date = String(b.date).split("T")[0]
+        await sendBookingEmail(b.player_email, "✅ تم قبول حجزك في ملاعبي", confirmedEmail(b.player_name, b.field_name,date, b.time_slot))
       } else if (status === "rejected") {
         await sendBookingEmail(b.player_email, "❌ تم رفض حجزك في ملاعبي", rejectedEmail(b.player_name, b.field_name, date, b.time_slot))
       }
