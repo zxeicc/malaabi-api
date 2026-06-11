@@ -173,7 +173,6 @@
   if (!filtered.length) { grid.innerHTML = '<div class="empty-state">لا توجد ملاعب</div>'; return; }
   grid.innerHTML = filtered.map(f => `
     <div class="field-card">
-// بعد
 <div class="field-img" style="${f.image ? '' : `background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}`}">
   ${f.image 
     ? `<img src="${f.image}" alt="${f.name}" style="width:100%;height:100%;object-fit:cover;" />`
