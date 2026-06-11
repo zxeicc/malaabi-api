@@ -3,218 +3,262 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ملاعبي - منصة حجز الملاعب</title>
+  <title>ملاعبي - لوحة المدير</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
 </head>
-<body class="auth-page">
+<body class="admin-page">
 
-  <!-- Background -->
-  <div class="auth-bg">
-    <div class="auth-bg-grid"></div>
-    <div class="auth-bg-glow"></div>
-    <div class="pitch-lines">
-      <div class="pitch-center-circle"></div>
-      <div class="pitch-line pitch-mid"></div>
-      <div class="pitch-line pitch-box-top"></div>
-      <div class="pitch-line pitch-box-bottom"></div>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="sidebar-logo">⚽</span>
+      <span class="sidebar-title">ملاعبي</span>
+      <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
     </div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link active" data-section="dashboard" onclick="showAdminSection('dashboard', this)">
+        <span class="link-icon">📊</span> لوحة التحكم
+      </a>
+      <a class="sidebar-link" data-section="fields" onclick="showAdminSection('fields', this)">
+        <span class="link-icon">🏟️</span> إدارة الملاعب
+      </a>
+      <a class="sidebar-link" data-section="bookings" onclick="showAdminSection('bookings', this)">
+        <span class="link-icon">📋</span> إدارة الحجوزات
+        <span class="sidebar-badge" id="pendingBadge">0</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebarAvatar">م</div>
+        <div>
+          <div class="sidebar-uname" id="sidebarName">المدير</div>
+          <div class="sidebar-urole">مدير الملعب</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">خروج</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+    <!-- Top bar -->
+    <header class="admin-topbar">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <h2 class="topbar-title" id="topbarTitle">لوحة التحكم</h2>
+      <div class="topbar-right">
+        <span class="topbar-date" id="topbarDate"></span>
+      </div>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="admin-section active" id="dashboard">
+      <div class="stats-grid">
+        <div class="stat-card stat-blue">
+          <div class="stat-icon">🏟️</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statFields">0</div>
+            <div class="stat-label">إجمالي الملاعب</div>
+          </div>
+        </div>
+        <div class="stat-card stat-green">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statBookings">0</div>
+            <div class="stat-label">إجمالي الحجوزات</div>
+          </div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statPending">0</div>
+            <div class="stat-label">في الانتظار</div>
+          </div>
+        </div>
+        <div class="stat-card stat-purple">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-num" id="statRevenue">0</div>
+            <div class="stat-label">الأرباح التقريبية (ر.س)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dash-card">
+          <h3 class="dash-card-title">أحدث الحجوزات</h3>
+          <div id="recentBookings"></div>
+        </div>
+        <div class="dash-card">
+          <h3 class="dash-card-title">الملاعب الأكثر حجزاً</h3>
+          <div id="topFields"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fields Management Section -->
+    <section class="admin-section hidden" id="fields">
+      <div class="section-toolbar">
+        <h2>إدارة الملاعب</h2>
+        <button class="btn-primary" onclick="openFieldModal()">+ إضافة ملعب</button>
+      </div>
+      <div class="admin-fields-grid" id="adminFieldsGrid"></div>
+    </section>
+
+    <!-- Bookings Management Section -->
+    <section class="admin-section hidden" id="bookings">
+      <div class="section-toolbar">
+        <h2>إدارة الحجوزات</h2>
+        <div class="booking-filters">
+          <button class="filter-btn active" onclick="filterBookings('all', this)">الكل</button>
+          <button class="filter-btn" onclick="filterBookings('pending', this)">قيد المراجعة</button>
+          <button class="filter-btn" onclick="filterBookings('confirmed', this)">مؤكدة</button>
+          <button class="filter-btn" onclick="filterBookings('cancelled', this)">ملغاة</button>
+        </div>
+      </div>
+      <div class="admin-bookings-list" id="adminBookingsList"></div>
+    </section>
   </div>
 
-  <!-- Main Auth Container -->
-  <div class="auth-container">
-    <!-- Logo -->
-    <div class="auth-logo">
-      <div class="logo-icon">⚽</div>
-      <div class="logo-text">
-        <span class="logo-main">ملاعبي</span>
-        <span class="logo-sub">منصة حجز الملاعب</span>
+  <!-- Field Modal (Add/Edit) -->
+  <div class="modal-overlay hidden" id="fieldModal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2 id="fieldModalTitle">إضافة ملعب جديد</h2>
+        <button class="modal-close" onclick="closeModal('fieldModal')">✕</button>
       </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="auth-tabs">
-      <button class="auth-tab active" data-tab="login" onclick="switchTab('login')">تسجيل الدخول</button>
-      <button class="auth-tab" data-tab="register" onclick="switchTab('register')">إنشاء حساب</button>
-    </div>
-
-    <!-- Login Form -->
-    <div class="auth-form-wrapper" id="loginForm">
-      <form class="auth-form" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label>البريد الإلكتروني أو اسم المستخدم</label>
-          <div class="input-wrapper">
-            <span class="input-icon">📧</span>
-            <input type="text" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>كلمة المرور</label>
-          <div class="input-wrapper">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required />
-          </div>
-        </div>
-
-        <div class="form-row-between">
-          <label class="checkbox-label">
-            <input type="checkbox" /> تذكرني
-          </label>
-          <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
-        </div>
-
-        <button type="submit" class="btn-primary btn-full">دخول كلاعب</button>
-
-        <div class="divider"><span>أو</span></div>
-
-        <button type="button" class="btn-outline btn-full" onclick="loginAsAdmin()">دخول كمدير ملعب</button>
+      <div class="modal-body">
+        <input type="hidden" id="fieldId" />
         
-        <p class="auth-hint">للتجربة: اللاعب (player@test.com / 123456) | المدير (admin@test.com / admin123)</p>
-      </form>
-    </div>
-
-    <!-- Register Form -->
-    <div class="auth-form-wrapper hidden" id="registerForm">
-      <form class="auth-form" onsubmit="handleRegister(event)">
         <div class="form-row-2">
           <div class="form-group">
-            <label>الاسم الأول</label>
-            <div class="input-wrapper">
-              <span class="input-icon">👤</span>
-              <input type="text" id="regFirstName" placeholder="الاسم الأول" required />
-            </div>
+            <label>اسم الملعب</label>
+            <input type="text" id="fieldName" placeholder="اسم الملعب" />
           </div>
           <div class="form-group">
-            <label>اسم العائلة</label>
-            <div class="input-wrapper">
-              <span class="input-icon">👤</span>
-              <input type="text" id="regLastName" placeholder="اسم العائلة" required />
-            </div>
+            <label>الموقع</label>
+            <input type="text" id="fieldLocation" placeholder="الحي / المنطقة" />
           </div>
         </div>
-        <div class="form-group">
-          <label>البريد الإلكتروني</label>
-          <div class="input-wrapper">
-            <span class="input-icon">📧</span>
-            <input type="email" id="regEmail" placeholder="البريد الإلكتروني" required />
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>السعر بالساعة (ر.س)</label>
+            <input type="number" id="fieldPrice" placeholder="150" min="1" />
           </div>
-        </div>
-        <div class="form-group">
-          <label>رقم الجوال</label>
-          <div class="input-wrapper">
-            <span class="input-icon">📱</span>
-            <input type="tel" id="regPhone" placeholder="05xxxxxxxx" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>كلمة المرور</label>
-          <div class="input-wrapper">
-            <span class="input-icon">🔒</span>
-            <input type="password" id="regPassword" placeholder="كلمة المرور (6 أحرف على الأقل)" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>نوع الحساب</label>
-          <div class="input-wrapper">
-            <span class="input-icon">🎯</span>
-            <select id="regRole">
-              <option value="player">لاعب</option>
-              <option value="admin">مدير ملعب</option>
+          <div class="form-group">
+            <label>نوع الملعب</label>
+            <select id="fieldType">
+              <option value="5v5">5 ضد 5</option>
+              <option value="7v7">7 ضد 7</option>
+              <option value="11v11">11 ضد 11</option>
             </select>
           </div>
         </div>
-        <button type="submit" class="btn-primary btn-full">إنشاء الحساب</button>
-      </form>
-    </div>
 
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>سعة الملعب (لاعب)</label>
+            <input type="number" id="fieldCapacity" placeholder="10" />
+          </div>
+          <div class="form-group">
+            <label>التقييم</label>
+            <input type="number" id="fieldRating" placeholder="4.5" min="1" max="5" step="0.1" />
+          </div>
+        </div>
+
+        <!-- اختيار اللون -->
+        <div class="form-group">
+          <label>لون البطاقة</label>
+          <div class="color-options" id="colorOptions">
+            <div class="color-opt active" data-color="linear-gradient(135deg,#16a34a,#14532d)" 
+                 style="background:linear-gradient(135deg,#16a34a,#14532d)" 
+                 onclick="selectColor('linear-gradient(135deg,#16a34a,#14532d)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#1d4ed8,#1e3a8a)" 
+                 style="background:linear-gradient(135deg,#1d4ed8,#1e3a8a)" 
+                 onclick="selectColor('linear-gradient(135deg,#1d4ed8,#1e3a8a)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#dc2626,#7f1d1d)" 
+                 style="background:linear-gradient(135deg,#dc2626,#7f1d1d)" 
+                 onclick="selectColor('linear-gradient(135deg,#dc2626,#7f1d1d)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#d97706,#78350f)" 
+                 style="background:linear-gradient(135deg,#d97706,#78350f)" 
+                 onclick="selectColor('linear-gradient(135deg,#d97706,#78350f)', this)"></div>
+            <div class="color-opt" data-color="linear-gradient(135deg,#7c3aed,#3b0764)" 
+                 style="background:linear-gradient(135deg,#7c3aed,#3b0764)" 
+                 onclick="selectColor('linear-gradient(135deg,#7c3aed,#3b0764)', this)"></div>
+          </div>
+        </div>
+
+        <!-- رفع الصورة -->
+        <div class="form-group">
+          <label>صورة الملعب</label>
+          <div class="file-upload-wrapper">
+            <input 
+              type="file" 
+              id="fieldImage" 
+              accept="image/*"
+              class="file-input"
+            />
+            <label for="fieldImage" class="file-upload-label">
+              <span class="upload-icon">📸</span>
+              <span>اختر صورة الملعب</span>
+              <small>أو اسحب الصورة هنا</small>
+            </label>
+            <div id="imagePreview" class="image-preview hidden"></div>
+          </div>
+        </div>
+
+        <!-- الأوقات المتاحة -->
+        <div class="form-group">
+          <label>الأوقات المتاحة</label>
+          <div class="time-checkboxes" id="timeCheckboxes"></div>
+        </div>
+
+        <!-- متاح للحجز -->
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="fieldAvailable" checked /> 
+            الملعب متاح للحجز
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('fieldModal')">إلغاء</button>
+        <button class="btn-primary" onclick="saveField()">حفظ الملعب</button>
+      </div>
+    </div>
   </div>
 
+  <!-- Booking Detail Modal -->
+  <div class="modal-overlay hidden" id="bookingDetailModal">
+    <div class="modal modal-sm">
+      <div class="modal-header">
+        <h2>تفاصيل الحجز</h2>
+        <button class="modal-close" onclick="closeModal('bookingDetailModal')">✕</button>
+      </div>
+      <div class="modal-body" id="bookingDetailContent"></div>
+      <div class="modal-footer" id="bookingDetailActions"></div>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="modal-overlay hidden" id="deleteModal">
+    <div class="modal modal-sm">
+      <div class="confirm-icon">🗑️</div>
+      <h2 class="confirm-title">حذف الملعب؟</h2>
+      <p class="confirm-text">سيتم حذف الملعب وجميع بياناته نهائياً</p>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal('deleteModal')">إلغاء</button>
+        <button class="btn-danger" id="confirmDeleteBtn">نعم، احذف</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Scripts -->
   <script src="app.js"></script>
-  <script>
-    const API = "https://malaabi-api-production.up.railway.app";
-    function switchTab(tab) {
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-      document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-      document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
-    }
-
-    async function handleLogin(e) {
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value;
-  const pass = document.getElementById('loginPassword').value;
-
-  try {
-    const res = await fetch(`${API}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: pass })
-    });
-    const data = await res.json();
-
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('currentUser', JSON.stringify(data.user));
-      window.location.href = data.user.role === 'admin' ? 'admin.html' : 'player.html';
-    } else {
-      showToast(data.message || 'بيانات خاطئة', 'error');
-    }
-  } catch (err) {
-    showToast('تعذر الاتصال بالسيرفر', 'error');
-  }
-}
-    async function loginAsAdmin() {
-  try {
-    const res = await fetch(`${API}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'admin@malaabi.com', password: '123456' })
-    });
-    const data = await res.json();
-
-    if (data.token) {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('currentUser', JSON.stringify(data.user));
-      window.location.href = 'admin.html';
-    } else {
-      showToast('تعذر الدخول كمدير', 'error');
-    }
-  } catch (err) {
-    showToast('تعذر الاتصال بالسيرفر', 'error');
-  }
-}
-
-async function handleRegister(e) {
-  e.preventDefault();
-  e.stopImmediatePropagation();
-  
-  const name = document.getElementById('regFirstName').value + ' ' + document.getElementById('regLastName').value;
-  const email = document.getElementById('regEmail').value;
-  const password = document.getElementById('regPassword').value;
-  const role = document.getElementById('regRole').value;
-  const phone = document.getElementById('regPhone').value;
-
-  try {
-    const res = await fetch(`${API}/api/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, role, phone })
-    });
-    const data = await res.json();
-    console.log('response:', data);
-
-    if (data.userId) {
-      showToast('تم إنشاء الحساب! سجل دخولك الآن', 'success');
-      setTimeout(() => switchTab('login'), 1000);
-    } else {
-      showToast(data.message || 'حدث خطأ', 'error');
-    }
-  } catch (err) {
-    showToast('تعذر الاتصال بالسيرفر', 'error');
-  }
-}
-
-  </script>
+  <script src="admin.js"></script>
 </body>
 </html>
