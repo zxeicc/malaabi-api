@@ -1,4 +1,5 @@
 const db = require("../config/db")
+const date = String(b.date).split("T")[0]
 const { sendBookingEmail, confirmedEmail, rejectedEmail } = require("../config/sendEmail")
  
 // add new booking

@@ -1,22 +1,17 @@
-const axios = require('axios');
+const nodemailer = require('nodemailer');
 
-async function sendMail({ to, subject, html }) {
-  try {
-    await axios.post('https://api.brevo.com/v3/smtp/email', {
-      sender: { name: 'ملاعبي ⚽', email: 'bookingsstadiums@gmail.com' },
-      to: [{ email: to }],
-      subject,
-      htmlContent: html
-    }, {
-      headers: {
-        'api-key': process.env.BREVO_API_KEY,
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('✅ Email sent to:', to);
-  } catch (err) {
-    console.log('❌ Email error:', err.response?.data || err.message);
-  }
-}
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+    }
+});
 
-module.exports = { sendMail };
+// ✅ اختبار الاتصال
+transporter.verify((err, success) => {
+    if (err) console.log('Email error:', err.message);
+    else console.log('Email ready ✅');
+});
+
+module.exports = transporter;
