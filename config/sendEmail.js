@@ -1,4 +1,4 @@
-const transporter = require('./mailer');
+/*const transporter = require('./mailer');
 
 async function sendBookingEmail(to, subject, html) {
   try {
@@ -42,4 +42,4 @@ function rejectedEmail(playerName, fieldName, date, timeSlot) {
     `;
 }
 
-module.exports = { sendBookingEmail, confirmedEmail, rejectedEmail };
+module.exports = { sendBookingEmail, confirmedEmail, rejectedEmail };*/

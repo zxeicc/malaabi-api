@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+/*const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -14,4 +14,4 @@ transporter.verify((err, success) => {
     else console.log('Email ready ✅');
 });
 
-module.exports = transporter;
+module.exports = transporter;*/
