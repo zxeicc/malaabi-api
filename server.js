@@ -1,6 +1,7 @@
 const express = require("express");
 const role = require("./middleware/role");
 require("dotenv").config();
+require('./config/mailer');
 const cors = require("cors");
 const auth = require("./middleware/auth");
 const bookingsRoutes = require('./routes/bookingsRoutes');
