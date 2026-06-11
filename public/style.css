@@ -143,7 +143,7 @@ input, select, textarea { font-family: var(--font-main); }
 .btn-primary:hover { background: linear-gradient(135deg, var(--green-500), var(--green-600)); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(22,163,74,.4); }
 .btn-outline {
   padding: 12px 24px; background: transparent;
-  border: 1.5px solid rgba(255,255,255,.25); color: rgba(255,255,255,.8);
+  border: 1.5px solid rgba(255,255,255,.25); color: rgb(16, 21, 50);
   border-radius: var(--radius-md); font-size: 14px; font-weight: 600; transition: var(--transition);
 }
 .btn-outline:hover { border-color: var(--green-500); color: var(--green-400); }
