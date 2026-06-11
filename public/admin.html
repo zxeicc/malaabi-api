@@ -7,160 +7,34 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* ✅ تحسينات إضافية */
-    .modal .form-group label { 
-      color: var(--gray-700) !important; 
-    }
-    
-    .modal .time-check-label { 
-      color: var(--gray-700) !important; 
-    }
-    
-    .modal .checkbox-label { 
-      color: var(--gray-700) !important; 
-    }
-    
-    .modal input, 
-    .modal select { 
-      background: white !important; 
-      border: 1.5px solid var(--gray-200) !important;
-      color: var(--gray-900) !important;
-      border-radius: 10px;
-    }
-    
-    .modal input::placeholder { 
-      color: var(--gray-400) !important; 
-    }
-    
-    /* ✅ تحسينات الأزرار */
-    .btn-primary {
-      background-color: #27ae60 !important;
-      color: white !important;
-    }
-    
-    .btn-primary:hover {
-      background-color: #1e8449 !important;
-      color: white !important;
-    }
-    
-    .btn-success {
-      background-color: #27ae60 !important;
-      color: white !important;
-    }
-    
-    .btn-success:hover {
-      background-color: #1e8449 !important;
-      color: white !important;
-    }
-    
-    /* ✅ رفع الصور */
-    .file-upload-wrapper {
-      position: relative;
-      margin: 10px 0;
-    }
-    
-    .file-input {
-      display: none;
-    }
-    
-    .file-upload-label {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 30px;
-      border: 2px dashed #27ae60;
-      border-radius: 10px;
-      background: #f8f9fa;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .file-upload-label:hover {
-      border-color: #1e8449;
-      background: #e8f5e9;
-    }
-    
-    .upload-icon {
-      font-size: 32px;
-    }
-    
-    .file-upload-label span {
-      color: #333;
-      font-weight: 600;
-    }
-    
-    .file-upload-label small {
-      color: #999;
-      font-size: 12px;
-    }
-    
-    .image-preview {
-      margin-top: 15px;
-      text-align: center;
-    }
-    
-    .image-preview.hidden {
-      display: none;
-    }
-    
-    .image-preview img {
-      max-width: 200px;
-      max-height: 200px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn-remove-image {
-      margin-top: 10px;
-      padding: 6px 12px;
-      background: #e74c3c;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-    
-    .btn-remove-image:hover {
-      background: #c0392b;
-    }
-    
-    /* ✅ عرض الصور في البطاقات */
-    .admin-field-image {
-      width: 100%;
-      height: 200px;
-      overflow: hidden;
-      background: #f8f9fa;
-    }
-    
-    .admin-field-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-    
-    .admin-field-card:hover .admin-field-image img {
-      transform: scale(1.05);
-    }
-    
-    .admin-field-image-placeholder {
-      width: 100%;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #ecf0f1;
-      color: #95a5a6;
-      font-size: 32px;
-    }
+    .modal .form-group label { color: var(--gray-700) !important; }
+    .modal .time-check-label { color: var(--gray-700) !important; }
+    .modal .checkbox-label { color: var(--gray-700) !important; }
+    .modal input, .modal select { background: white !important; border: 1.5px solid var(--gray-200) !important; color: var(--gray-900) !important; border-radius: 10px; }
+    .modal input::placeholder { color: var(--gray-400) !important; }
+    .btn-primary { background-color: #27ae60 !important; color: white !important; }
+    .btn-primary:hover { background-color: #1e8449 !important; }
+    .btn-success { background-color: #27ae60 !important; color: white !important; }
+    .btn-success:hover { background-color: #1e8449 !important; }
+    .file-upload-wrapper { position: relative; margin: 10px 0; }
+    .file-input { display: none; }
+    .file-upload-label { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 30px; border: 2px dashed #27ae60; border-radius: 10px; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease; }
+    .file-upload-label:hover { border-color: #1e8449; background: #e8f5e9; }
+    .upload-icon { font-size: 32px; }
+    .file-upload-label span { color: #333; font-weight: 600; }
+    .file-upload-label small { color: #999; font-size: 12px; }
+    .image-preview { margin-top: 15px; text-align: center; }
+    .image-preview.hidden { display: none; }
+    .image-preview img { max-width: 200px; max-height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+    .btn-remove-image { margin-top: 10px; padding: 6px 12px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    .admin-field-image { width: 100%; height: 160px; overflow: hidden; }
+    .admin-field-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .admin-field-card:hover .admin-field-image img { transform: scale(1.05); }
+    .admin-field-image-placeholder { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; background: #ecf0f1; color: #95a5a6; font-size: 24px; }
   </style>
 </head>
 <body class="admin-page">
 
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <span class="sidebar-logo">⚽</span>
@@ -191,9 +65,7 @@
     </div>
   </aside>
 
-  <!-- Main -->
   <div class="admin-main">
-    <!-- Top bar -->
     <header class="admin-topbar">
       <button class="menu-btn" onclick="toggleSidebar()">☰</button>
       <h2 class="topbar-title" id="topbarTitle">لوحة التحكم</h2>
@@ -202,52 +74,19 @@
       </div>
     </header>
 
-    <!-- Dashboard Section -->
     <section class="admin-section active" id="dashboard">
       <div class="stats-grid">
-        <div class="stat-card stat-blue">
-          <div class="stat-icon">🏟️</div>
-          <div class="stat-info">
-            <div class="stat-num" id="statFields">0</div>
-            <div class="stat-label">إجمالي الملاعب</div>
-          </div>
-        </div>
-        <div class="stat-card stat-green">
-          <div class="stat-icon">📋</div>
-          <div class="stat-info">
-            <div class="stat-num" id="statBookings">0</div>
-            <div class="stat-label">إجمالي الحجوزات</div>
-          </div>
-        </div>
-        <div class="stat-card stat-orange">
-          <div class="stat-icon">⏳</div>
-          <div class="stat-info">
-            <div class="stat-num" id="statPending">0</div>
-            <div class="stat-label">في الانتظار</div>
-          </div>
-        </div>
-        <div class="stat-card stat-purple">
-          <div class="stat-icon">💰</div>
-          <div class="stat-info">
-            <div class="stat-num" id="statRevenue">0</div>
-            <div class="stat-label">الأرباح التقريبية (ر.س)</div>
-          </div>
-        </div>
+        <div class="stat-card stat-blue"><div class="stat-icon">🏟️</div><div class="stat-info"><div class="stat-num" id="statFields">0</div><div class="stat-label">إجمالي الملاعب</div></div></div>
+        <div class="stat-card stat-green"><div class="stat-icon">📋</div><div class="stat-info"><div class="stat-num" id="statBookings">0</div><div class="stat-label">إجمالي الحجوزات</div></div></div>
+        <div class="stat-card stat-orange"><div class="stat-icon">⏳</div><div class="stat-info"><div class="stat-num" id="statPending">0</div><div class="stat-label">في الانتظار</div></div></div>
+        <div class="stat-card stat-purple"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-num" id="statRevenue">0</div><div class="stat-label">الأرباح التقريبية (ر.س)</div></div></div>
       </div>
-
       <div class="dashboard-grid">
-        <div class="dash-card">
-          <h3 class="dash-card-title">أحدث الحجوزات</h3>
-          <div id="recentBookings"></div>
-        </div>
-        <div class="dash-card">
-          <h3 class="dash-card-title">الملاعب الأكثر حجزاً</h3>
-          <div id="topFields"></div>
-        </div>
+        <div class="dash-card"><h3 class="dash-card-title">أحدث الحجوزات</h3><div id="recentBookings"></div></div>
+        <div class="dash-card"><h3 class="dash-card-title">الملاعب الأكثر حجزاً</h3><div id="topFields"></div></div>
       </div>
     </section>
 
-    <!-- Fields Management Section -->
     <section class="admin-section hidden" id="fields">
       <div class="section-toolbar">
         <h2>إدارة الملاعب</h2>
@@ -256,7 +95,6 @@
       <div class="admin-fields-grid" id="adminFieldsGrid"></div>
     </section>
 
-    <!-- Bookings Management Section -->
     <section class="admin-section hidden" id="bookings">
       <div class="section-toolbar">
         <h2>إدارة الحجوزات</h2>
@@ -271,7 +109,7 @@
     </section>
   </div>
 
-  <!-- Field Modal (Add/Edit) -->
+  <!-- Field Modal -->
   <div class="modal-overlay hidden" id="fieldModal">
     <div class="modal modal-lg">
       <div class="modal-header">
@@ -281,38 +119,16 @@
       <div class="modal-body">
         <input type="hidden" id="fieldId" />
         <div class="form-row-2">
-          <div class="form-group">
-            <label>اسم الملعب</label>
-            <input type="text" id="fieldName" placeholder="اسم الملعب" />
-          </div>
-          <div class="form-group">
-            <label>الموقع</label>
-            <input type="text" id="fieldLocation" placeholder="الحي / المنطقة" />
-          </div>
+          <div class="form-group"><label>اسم الملعب</label><input type="text" id="fieldName" placeholder="اسم الملعب" /></div>
+          <div class="form-group"><label>الموقع</label><input type="text" id="fieldLocation" placeholder="الحي / المنطقة" /></div>
         </div>
         <div class="form-row-2">
-          <div class="form-group">
-            <label>السعر بالساعة (ر.س)</label>
-            <input type="number" id="fieldPrice" placeholder="150" min="1" />
-          </div>
-          <div class="form-group">
-            <label>نوع الملعب</label>
-            <select id="fieldType">
-              <option value="5v5">5 ضد 5</option>
-              <option value="7v7">7 ضد 7</option>
-              <option value="11v11">11 ضد 11</option>
-            </select>
-          </div>
+          <div class="form-group"><label>السعر بالساعة (ر.س)</label><input type="number" id="fieldPrice" placeholder="150" min="1" /></div>
+          <div class="form-group"><label>نوع الملعب</label><select id="fieldType"><option value="5v5">5 ضد 5</option><option value="7v7">7 ضد 7</option><option value="11v11">11 ضد 11</option></select></div>
         </div>
         <div class="form-row-2">
-          <div class="form-group">
-            <label>سعة الملعب (لاعب)</label>
-            <input type="number" id="fieldCapacity" placeholder="10" />
-          </div>
-          <div class="form-group">
-            <label>التقييم</label>
-            <input type="number" id="fieldRating" placeholder="4.5" min="1" max="5" step="0.1" />
-          </div>
+          <div class="form-group"><label>سعة الملعب (لاعب)</label><input type="number" id="fieldCapacity" placeholder="10" /></div>
+          <div class="form-group"><label>التقييم</label><input type="number" id="fieldRating" placeholder="4.5" min="1" max="5" step="0.1" /></div>
         </div>
         <div class="form-group">
           <label>لون البطاقة</label>
@@ -324,35 +140,20 @@
             <div class="color-opt" data-color="linear-gradient(135deg,#7c3aed,#3b0764)" style="background:linear-gradient(135deg,#7c3aed,#3b0764)" onclick="selectColor('linear-gradient(135deg,#7c3aed,#3b0764)', this)"></div>
           </div>
         </div>
-        
-        <!-- ✅ خانة رفع الصورة -->
         <div class="form-group">
           <label>صورة الملعب</label>
           <div class="file-upload-wrapper">
-            <input 
-              type="file" 
-              id="fieldImage" 
-              accept="image/*"
-              class="file-input"
-            />
+            <input type="file" id="fieldImage" accept="image/*" class="file-input" />
             <label for="fieldImage" class="file-upload-label">
               <span class="upload-icon">📸</span>
               <span>اختر صورة الملعب</span>
-              <small>أو اسحب الصورة هنا</small>
+              <small>أو اسحب الصورة هنا (أقصى 2MB)</small>
             </label>
             <div id="imagePreview" class="image-preview hidden"></div>
           </div>
         </div>
-        
-        <div class="form-group">
-          <label>الأوقات المتاحة</label>
-          <div class="time-checkboxes" id="timeCheckboxes"></div>
-        </div>
-        <div class="form-group">
-          <label class="checkbox-label">
-            <input type="checkbox" id="fieldAvailable" checked /> الملعب متاح للحجز
-          </label>
-        </div>
+        <div class="form-group"><label>الأوقات المتاحة</label><div class="time-checkboxes" id="timeCheckboxes"></div></div>
+        <div class="form-group"><label class="checkbox-label"><input type="checkbox" id="fieldAvailable" checked /> الملعب متاح للحجز</label></div>
       </div>
       <div class="modal-footer">
         <button class="btn-secondary" onclick="closeModal('fieldModal')">إلغاء</button>
@@ -364,16 +165,13 @@
   <!-- Booking Detail Modal -->
   <div class="modal-overlay hidden" id="bookingDetailModal">
     <div class="modal modal-sm">
-      <div class="modal-header">
-        <h2>تفاصيل الحجز</h2>
-        <button class="modal-close" onclick="closeModal('bookingDetailModal')">✕</button>
-      </div>
+      <div class="modal-header"><h2>تفاصيل الحجز</h2><button class="modal-close" onclick="closeModal('bookingDetailModal')">✕</button></div>
       <div class="modal-body" id="bookingDetailContent"></div>
       <div class="modal-footer" id="bookingDetailActions"></div>
     </div>
   </div>
 
-  <!-- Delete Confirm Modal -->
+  <!-- Delete Modal -->
   <div class="modal-overlay hidden" id="deleteModal">
     <div class="modal modal-sm">
       <div class="confirm-icon">🗑️</div>
@@ -390,538 +188,263 @@
 
   <script src="app.js"></script>
   <script>
-// ========================================
-// متغيرات عامة
-// ========================================
-let currentUser = null;
-let selectedColor = 'linear-gradient(135deg,#16a34a,#14532d)';
-let bookingFilter = 'all';
-let fieldImageData = null;
+    let currentUser = null;
+    let selectedColor = 'linear-gradient(135deg,#16a34a,#14532d)';
+    let bookingFilter = 'all';
+    let fieldImageData = null;
 
-// ========================================
-// Initialization
-// ========================================
-document.addEventListener('DOMContentLoaded', async () => {
-  currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  
-  if (!currentUser || !localStorage.getItem('token')) {
-    window.location.href = 'index.html';
-    return;
-  }
-
-  // تحديث البيانات
-  document.getElementById('sidebarName').textContent = currentUser.name;
-  document.getElementById('sidebarAvatar').textContent = currentUser.name.charAt(0);
-  document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('ar-SA', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-
-  // إعداد معالجة رفع الصور
-  setupImageUpload();
-
-  // تحديث لوحة التحكم
-  await updateDashboard();
-});
-
-// ========================================
-// معالجة رفع الصور (Image Upload Handler)
-// ========================================
-function setupImageUpload() {
-  const fileInput = document.getElementById('fieldImage');
-  const fileLabel = document.querySelector('.file-upload-label');
-  const imagePreview = document.getElementById('imagePreview');
-
-  if (!fileInput || !fileLabel) return;
-
-  // معالجة تغيير الملف
-  fileInput.addEventListener('change', handleFileSelect);
-
-  // معالجة السحب والإفلات
-  fileLabel.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    fileLabel.style.borderColor = '#1e8449';
-    fileLabel.style.background = '#e8f5e9';
-  });
-
-  fileLabel.addEventListener('dragleave', () => {
-    fileLabel.style.borderColor = '#27ae60';
-    fileLabel.style.background = '#f8f9fa';
-  });
-
-  fileLabel.addEventListener('drop', (e) => {
-    e.preventDefault();
-    fileLabel.style.borderColor = '#27ae60';
-    fileLabel.style.background = '#f8f9fa';
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      fileInput.files = files;
-      handleFileSelect();
-    }
-  });
-
-  function handleFileSelect() {
-    const file = fileInput.files[0];
-    if (!file) return;
-
-    // التحقق من نوع الملف
-    if (!file.type.startsWith('image/')) {
-      showToast('الرجاء اختيار صورة', 'error');
-      fileInput.value = '';
-      return;
-    }
-
-    // التحقق من حجم الملف (أقصى 5 MB)
-    if (file.size > 5 * 1024 * 1024) {
-      showToast('حجم الصورة كبير جداً (أقصى 5 MB)', 'error');
-      fileInput.value = '';
-      return;
-    }
-
-    // عرض المعاينة
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      imagePreview.innerHTML = `
-        <img src="${e.target.result}" alt="معاينة الملعب">
-        <div class="preview-name">${file.name}</div>
-        <button type="button" class="btn-remove-image" onclick="removeImage()">إزالة</button>
-      `;
-      imagePreview.classList.remove('hidden');
-      fieldImageData = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function removeImage() {
-  const fileInput = document.getElementById('fieldImage');
-  const imagePreview = document.getElementById('imagePreview');
-  fileInput.value = '';
-  imagePreview.innerHTML = '';
-  imagePreview.classList.add('hidden');
-  fieldImageData = null;
-}
-
-// ========================================
-// إدارة الأقسام (Section Management)
-// ========================================
-function showAdminSection(id, el) {
-  // إخفاء جميع الأقسام
-  document.querySelectorAll('.admin-section').forEach(s => {
-    s.classList.add('hidden');
-    s.classList.remove('active');
-  });
-
-  // إزالة التفعيل من جميع الروابط
-  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-
-  // إظهار القسم المختار
-  document.getElementById(id).classList.remove('hidden');
-  document.getElementById(id).classList.add('active');
-
-  if (el) el.classList.add('active');
-
-  // تحديث العنوان
-  const titles = {
-    dashboard: 'لوحة التحكم',
-    fields: 'إدارة الملاعب',
-    bookings: 'إدارة الحجوزات'
-  };
-  document.getElementById('topbarTitle').textContent = titles[id] || '';
-
-  // تحميل البيانات المناسبة
-  if (id === 'fields') renderAdminFields();
-  if (id === 'bookings') renderAdminBookings();
-  if (id === 'dashboard') updateDashboard();
-
-  // إغلاق القائمة الجانبية على الأجهزة الصغيرة
-  if (window.innerWidth < 768) {
-    document.getElementById('sidebar').classList.remove('open');
-  }
-}
-
-// ========================================
-// لوحة التحكم (Dashboard)
-// ========================================
-async function updateDashboard() {
-  try {
-    const fields = await getFields();
-    const res = await apiRequest('/bookings');
-    const bookings = res.data || [];
-
-    const pending = bookings.filter(b => b.status === 'pending');
-    const confirmed = bookings.filter(b => b.status === 'confirmed');
-    const revenue = confirmed.reduce((s, b) => s + parseFloat(b.total), 0);
-
-    // تحديث الإحصائيات
-    document.getElementById('statFields').textContent = fields.length;
-    document.getElementById('statBookings').textContent = bookings.length;
-    document.getElementById('statPending').textContent = pending.length;
-    document.getElementById('statRevenue').textContent = revenue.toLocaleString();
-
-    // تحديث الشارة
-    const badge = document.getElementById('pendingBadge');
-    badge.textContent = pending.length;
-    badge.style.display = pending.length > 0 ? 'inline-flex' : 'none';
-
-    // أحدث الحجوزات
-    const recent = bookings.slice(0, 5);
-    document.getElementById('recentBookings').innerHTML = recent.length ? recent.map(b => `
-      <div class="mini-booking">
-        <div class="mini-booking-info">
-          <strong>${b.name}</strong>
-          <span>${b.player_name} — ${b.date.split('T')[0]} ${b.time_slot}</span>
-        </div>
-        <span class="booking-status status-${b.status}">${statusLabel(b.status)}</span>
-      </div>
-    `).join('') : '<p class="empty-text">لا توجد حجوزات بعد</p>';
-
-    // الملاعب الأكثر حجزاً
-    const fieldCounts = {};
-    bookings.forEach(b => {
-      fieldCounts[b.name] = (fieldCounts[b.name] || 0) + 1;
-    });
-    const topF = Object.entries(fieldCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 4);
-
-    document.getElementById('topFields').innerHTML = topF.length ? topF.map(([name, count]) => `
-      <div class="top-field-row">
-        <span class="top-field-name">${name}</span>
-        <div class="top-field-bar-wrap">
-          <div class="top-field-bar" style="width:${Math.min(count * 20, 100)}%"></div>
-        </div>
-        <span class="top-field-count">${count}</span>
-      </div>
-    `).join('') : '<p class="empty-text">لا توجد بيانات بعد</p>';
-
-  } catch (error) {
-    console.error('خطأ في تحديث لوحة التحكم:', error);
-    showToast('خطأ في تحميل البيانات', 'error');
-  }
-}
-
-// ========================================
-// إدارة الملاعب (Fields Management)
-// ========================================
-async function renderAdminFields() {
-  try {
-    const grid = document.getElementById('adminFieldsGrid');
-    grid.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
-    
-    const fields = await getFields();
-    window.allAdminFields = fields;
-
-    if (!fields.length) {
-      grid.innerHTML = '<div class="empty-state">لا توجد ملاعب. أضف ملعبك الأول!</div>';
-      return;
-    }
-
-    grid.innerHTML = fields.map(f => `
-      <div class="admin-field-card">
-        <div class="admin-field-header" style="background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}">
-          <span class="field-badge">${f.type}</span>
-          <span class="field-status ${f.available ? 'available' : 'unavailable'}">
-            ${f.available ? 'متاح' : 'مغلق'}
-          </span>
-        </div>
-        
-        ${f.image ? `
-          <div class="admin-field-image">
-            <img src="${f.image}" alt="${f.name}" />
-          </div>
-        ` : `
-          <div class="admin-field-image-placeholder">📸 لا توجد صورة</div>
-        `}
-        
-        <div class="admin-field-body">
-          <h3>${f.name}</h3>
-          <p>📍 ${f.location}</p>
-          <p>💰 ${f.price_per_hour} ر.س/ساعة | 👥 ${f.capacity} لاعب</p>
-          <p>⭐ ${f.rating}</p>
-        </div>
-        
-        <div class="admin-field-footer">
-          <button class="btn-outline btn-sm" onclick="editField(${f.id})">تعديل</button>
-          <button class="btn-danger btn-sm" onclick="deleteField(${f.id})">حذف</button>
-        </div>
-      </div>
-    `).join('');
-
-  } catch (error) {
-    console.error('خطأ في تحميل الملاعب:', error);
-    showToast('خطأ في تحميل الملاعب', 'error');
-  }
-}
-
-// ========================================
-// نموذج الملعب (Field Modal)
-// ========================================
-function openFieldModal(field = null) {
-  document.getElementById('fieldId').value = field ? field.id : '';
-  document.getElementById('fieldName').value = field ? field.name : '';
-  document.getElementById('fieldLocation').value = field ? field.location : '';
-  document.getElementById('fieldPrice').value = field ? field.price_per_hour : '';
-  document.getElementById('fieldType').value = field ? field.type : '5v5';
-  document.getElementById('fieldCapacity').value = field ? field.capacity : '';
-  document.getElementById('fieldRating').value = field ? field.rating : '4.5';
-  document.getElementById('fieldAvailable').checked = field ? field.available : true;
-  document.getElementById('fieldModalTitle').textContent = field ? 'تعديل الملعب' : 'إضافة ملعب جديد';
-
-  // تحضير الأوقات
-  renderTimeCheckboxes(field ? (field.timeSlots || []) : []);
-
-  // تحضير الألوان
-  if (field) {
-    selectedColor = field.color;
-    document.querySelectorAll('.color-opt').forEach(c => {
-      c.classList.toggle('active', c.dataset.color === field.color);
-    });
-  }
-
-  // تحضير الصورة
-  removeImage();
-
-  // فتح النموذج
-  document.getElementById('fieldModal').classList.remove('hidden');
-}
-
-async function saveField() {
-  try {
-    const id = document.getElementById('fieldId').value;
-    const timeSlots = [...document.querySelectorAll('[name="fieldTime"]:checked')]
-      .map(cb => cb.value);
-
-    const formData = new FormData();
-    formData.append('name', document.getElementById('fieldName').value);
-    formData.append('location', document.getElementById('fieldLocation').value);
-    formData.append('price_per_hour', parseFloat(document.getElementById('fieldPrice').value) || 150);
-    formData.append('type', document.getElementById('fieldType').value);
-    formData.append('capacity', parseInt(document.getElementById('fieldCapacity').value) || 10);
-    formData.append('rating', parseFloat(document.getElementById('fieldRating').value) || 4.5);
-    formData.append('available', document.getElementById('fieldAvailable').checked);
-    formData.append('color', selectedColor);
-    formData.append('timeSlots', JSON.stringify(timeSlots));
-
-    // إضافة الصورة إن وجدت
-    const fileInput = document.getElementById('fieldImage');
-    if (fileInput.files.length > 0) {
-      formData.append('image', fileInput.files[0]);
-    }
-
-    if (!formData.get('name') || !formData.get('location')) {
-      showToast('الرجاء إدخال الاسم والموقع', 'error');
-      return;
-    }
-
-// ✅ صحيح
-const response = await fetch(id ? `${API}/api/fields/${id}` : `${API}/api/fields`, {
-      method: id ? 'PUT' : 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: formData
-    });
-
-    const data = await response.json();
-
-    if (data.success || data.id) {
-      closeModal('fieldModal');
-      await renderAdminFields();
+    document.addEventListener('DOMContentLoaded', async () => {
+      currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser || !localStorage.getItem('token')) { window.location.href = 'index.html'; return; }
+      document.getElementById('sidebarName').textContent = currentUser.name;
+      document.getElementById('sidebarAvatar').textContent = currentUser.name.charAt(0);
+      document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('ar-SA', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      setupImageUpload();
       await updateDashboard();
-      showToast(id ? 'تم تعديل الملعب' : 'تم إضافة الملعب', 'success');
-      removeImage();
-    } else {
-      showToast(data.message || 'حدث خطأ', 'error');
+    });
+
+    function setupImageUpload() {
+      const fileInput = document.getElementById('fieldImage');
+      if (!fileInput) return;
+      fileInput.addEventListener('change', function() {
+        const file = fileInput.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { showToast('الرجاء اختيار صورة', 'error'); fileInput.value = ''; return; }
+        if (file.size > 2 * 1024 * 1024) { showToast('حجم الصورة كبير جداً (أقصى 2MB)', 'error'); fileInput.value = ''; return; }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = document.getElementById('imagePreview');
+          preview.innerHTML = `<img src="${e.target.result}" alt="معاينة"><br><button type="button" class="btn-remove-image" onclick="removeImage()">إزالة الصورة</button>`;
+          preview.classList.remove('hidden');
+          fieldImageData = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
-  } catch (error) {
-    console.error('خطأ:', error);
-    showToast('خطأ في الاتصال', 'error');
-  }
-}
+    function removeImage() {
+      document.getElementById('fieldImage').value = '';
+      const preview = document.getElementById('imagePreview');
+      preview.innerHTML = '';
+      preview.classList.add('hidden');
+      fieldImageData = null;
+    }
 
-function editField(id) {
-  const field = window.allAdminFields.find(f => f.id === id);
-  openFieldModal(field);
-}
+    function showAdminSection(id, el) {
+      document.querySelectorAll('.admin-section').forEach(s => { s.classList.add('hidden'); s.classList.remove('active'); });
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.getElementById(id).classList.remove('hidden');
+      document.getElementById(id).classList.add('active');
+      if (el) el.classList.add('active');
+      const titles = { dashboard: 'لوحة التحكم', fields: 'إدارة الملاعب', bookings: 'إدارة الحجوزات' };
+      document.getElementById('topbarTitle').textContent = titles[id] || '';
+      if (id === 'fields') renderAdminFields();
+      if (id === 'bookings') renderAdminBookings();
+      if (id === 'dashboard') updateDashboard();
+      if (window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+    }
 
-function renderTimeCheckboxes(selectedSlots = []) {
-  const times = [
-    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00',
-    '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00',
-    '20:00', '21:00', '22:00', '23:00'
-  ];
+    async function updateDashboard() {
+      const fields = await getFields();
+      const res = await apiRequest('/bookings');
+      const bookings = res.data || [];
+      const pending = bookings.filter(b => b.status === 'pending');
+      const confirmed = bookings.filter(b => b.status === 'confirmed');
+      const revenue = confirmed.reduce((s, b) => s + parseFloat(b.total), 0);
+      document.getElementById('statFields').textContent = fields.length;
+      document.getElementById('statBookings').textContent = bookings.length;
+      document.getElementById('statPending').textContent = pending.length;
+      document.getElementById('statRevenue').textContent = revenue.toLocaleString();
+      const badge = document.getElementById('pendingBadge');
+      badge.textContent = pending.length;
+      badge.style.display = pending.length > 0 ? 'inline-flex' : 'none';
+      document.getElementById('recentBookings').innerHTML = bookings.slice(0,5).map(b => `
+        <div class="mini-booking">
+          <div class="mini-booking-info"><strong>${b.name}</strong><span>${b.player_name} — ${b.date.split('T')[0]} ${b.time_slot}</span></div>
+          <span class="booking-status status-${b.status}">${statusLabel(b.status)}</span>
+        </div>`).join('') || '<p class="empty-text">لا توجد حجوزات بعد</p>';
+      const fieldCounts = {};
+      bookings.forEach(b => { fieldCounts[b.name] = (fieldCounts[b.name] || 0) + 1; });
+      const topF = Object.entries(fieldCounts).sort((a,b) => b[1]-a[1]).slice(0,4);
+      document.getElementById('topFields').innerHTML = topF.map(([name, count]) => `
+        <div class="top-field-row"><span class="top-field-name">${name}</span><div class="top-field-bar-wrap"><div class="top-field-bar" style="width:${Math.min(count*20,100)}%"></div></div><span class="top-field-count">${count}</span></div>`).join('') || '<p class="empty-text">لا توجد بيانات بعد</p>';
+    }
 
-  document.getElementById('timeCheckboxes').innerHTML = times.map(t => `
-    <label class="time-check-label">
-      <input type="checkbox" value="${t}" name="fieldTime" ${selectedSlots.includes(t) ? 'checked' : ''} />
-      ${t}
-    </label>
-  `).join('');
-}
+    async function renderAdminFields() {
+      const grid = document.getElementById('adminFieldsGrid');
+      grid.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+      const fields = await getFields();
+      window.allAdminFields = fields;
+      if (!fields.length) { grid.innerHTML = '<div class="empty-state">لا توجد ملاعب. أضف ملعبك الأول!</div>'; return; }
+      grid.innerHTML = fields.map(f => `
+        <div class="admin-field-card">
+          <div class="admin-field-header" style="background:${f.color || 'linear-gradient(135deg,#16a34a,#14532d)'}">
+            <span class="field-badge">${f.type}</span>
+            <span class="field-status ${f.available ? 'available' : 'unavailable'}">${f.available ? 'متاح' : 'مغلق'}</span>
+          </div>
+          ${f.image ? `<div class="admin-field-image"><img src="${f.image}" alt="${f.name}" /></div>` : `<div class="admin-field-image-placeholder">📸</div>`}
+          <div class="admin-field-body">
+            <h3>${f.name}</h3>
+            <p>📍 ${f.location}</p>
+            <p>💰 ${f.price_per_hour} ر.س/ساعة | 👥 ${f.capacity} لاعب</p>
+            <p>⭐ ${f.rating}</p>
+          </div>
+          <div class="admin-field-footer">
+            <button class="btn-outline btn-sm" onclick="editField(${f.id})">تعديل</button>
+            <button class="btn-danger btn-sm" onclick="deleteField(${f.id})">حذف</button>
+          </div>
+        </div>`).join('');
+    }
 
-function deleteField(id) {
-  document.getElementById('deleteModal').classList.remove('hidden');
-  document.getElementById('confirmDeleteBtn').onclick = async () => {
-    try {
-      const data = await apiRequest(`/fields/${id}`, 'DELETE');
-      if (data.success) {
-        closeModal('deleteModal');
-        await renderAdminFields();
-        await updateDashboard();
-        showToast('تم حذف الملعب', 'success');
-      } else {
-        showToast(data.message || 'حدث خطأ', 'error');
+    function openFieldModal(field = null) {
+      document.getElementById('fieldId').value = field ? field.id : '';
+      document.getElementById('fieldName').value = field ? field.name : '';
+      document.getElementById('fieldLocation').value = field ? field.location : '';
+      document.getElementById('fieldPrice').value = field ? field.price_per_hour : '';
+      document.getElementById('fieldType').value = field ? field.type : '5v5';
+      document.getElementById('fieldCapacity').value = field ? field.capacity : '';
+      document.getElementById('fieldRating').value = field ? field.rating : '4.5';
+      document.getElementById('fieldAvailable').checked = field ? field.available : true;
+      document.getElementById('fieldModalTitle').textContent = field ? 'تعديل الملعب' : 'إضافة ملعب جديد';
+      renderTimeCheckboxes(field ? (field.timeSlots || []) : []);
+      if (field && field.color) {
+        selectedColor = field.color;
+        document.querySelectorAll('.color-opt').forEach(c => c.classList.toggle('active', c.dataset.color === field.color));
       }
-    } catch (error) {
-      console.error('خطأ:', error);
-      showToast('خطأ في الحذف', 'error');
-    }
-  };
-}
-
-function selectColor(color, el) {
-  selectedColor = color;
-  document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-}
-
-// ========================================
-// إدارة الحجوزات (Bookings Management)
-// ========================================
-async function renderAdminBookings(filter = 'all') {
-  try {
-    const list = document.getElementById('adminBookingsList');
-    list.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
-
-    const res = await apiRequest('/bookings');
-    let bookings = res.data || [];
-    window.allBookings = bookings;
-
-    if (filter !== 'all') {
-      bookings = bookings.filter(b => b.status === filter);
+      removeImage();
+      document.getElementById('fieldModal').classList.remove('hidden');
     }
 
-    if (!bookings.length) {
-      list.innerHTML = '<div class="empty-state">لا توجد حجوزات</div>';
-      return;
+    async function saveField() {
+      const id = document.getElementById('fieldId').value;
+      const name = document.getElementById('fieldName').value;
+      const location = document.getElementById('fieldLocation').value;
+      if (!name || !location) { showToast('الرجاء إدخال الاسم والموقع', 'error'); return; }
+      const timeSlots = [...document.querySelectorAll('[name="fieldTime"]:checked')].map(cb => cb.value);
+      const field = {
+        name,
+        location,
+        price_per_hour: parseFloat(document.getElementById('fieldPrice').value) || 150,
+        type: document.getElementById('fieldType').value,
+        capacity: parseInt(document.getElementById('fieldCapacity').value) || 10,
+        rating: parseFloat(document.getElementById('fieldRating').value) || 4.5,
+        available: document.getElementById('fieldAvailable').checked,
+        color: selectedColor,
+        timeSlots,
+        image: fieldImageData || null
+      };
+      try {
+        const data = id
+          ? await apiRequest(`/fields/${id}`, 'PUT', field)
+          : await apiRequest('/fields', 'POST', field);
+        if (data.success || data.id) {
+          closeModal('fieldModal');
+          await renderAdminFields();
+          await updateDashboard();
+          showToast(id ? 'تم تعديل الملعب' : 'تم إضافة الملعب', 'success');
+          removeImage();
+        } else {
+          showToast(data.message || 'حدث خطأ', 'error');
+        }
+      } catch (err) {
+        showToast('خطأ في الاتصال', 'error');
+      }
     }
 
-    list.innerHTML = bookings.map(b => `
-      <div class="admin-booking-row">
-        <div class="booking-color-bar" style="background:#16a34a"></div>
-        <div class="admin-booking-info">
-          <div class="booking-head">
-            <strong>${b.name}</strong>
-            <span class="booking-status status-${b.status}">${statusLabel(b.status)}</span>
+    function editField(id) {
+      const field = window.allAdminFields.find(f => f.id === id);
+      openFieldModal(field);
+    }
+
+    function renderTimeCheckboxes(selectedSlots = []) {
+      const times = ['06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
+      document.getElementById('timeCheckboxes').innerHTML = times.map(t => `
+        <label class="time-check-label"><input type="checkbox" value="${t}" name="fieldTime" ${selectedSlots.includes(t) ? 'checked' : ''} />${t}</label>`).join('');
+    }
+
+    function deleteField(id) {
+      document.getElementById('deleteModal').classList.remove('hidden');
+      document.getElementById('confirmDeleteBtn').onclick = async () => {
+        const data = await apiRequest(`/fields/${id}`, 'DELETE');
+        if (data.success) { closeModal('deleteModal'); await renderAdminFields(); await updateDashboard(); showToast('تم حذف الملعب', 'success'); }
+        else { showToast(data.message || 'حدث خطأ', 'error'); }
+      };
+    }
+
+    function selectColor(color, el) {
+      selectedColor = color;
+      document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    async function renderAdminBookings(filter = 'all') {
+      const list = document.getElementById('adminBookingsList');
+      list.innerHTML = '<div class="empty-state">جاري التحميل...</div>';
+      const res = await apiRequest('/bookings');
+      let bookings = res.data || [];
+      window.allBookings = bookings;
+      if (filter !== 'all') bookings = bookings.filter(b => b.status === filter);
+      if (!bookings.length) { list.innerHTML = '<div class="empty-state">لا توجد حجوزات</div>'; return; }
+      list.innerHTML = bookings.map(b => `
+        <div class="admin-booking-row">
+          <div class="booking-color-bar" style="background:#16a34a"></div>
+          <div class="admin-booking-info">
+            <div class="booking-head"><strong>${b.name}</strong><span class="booking-status status-${b.status}">${statusLabel(b.status)}</span></div>
+            <div class="booking-details">
+              <span>👤 ${b.player_name}</span><span>📅 ${b.date.split('T')[0]}</span>
+              <span>⏰ ${b.time_slot}</span><span>⏱ ${b.duration} ساعة</span><span>💰 ${b.total} ر.س</span>
+            </div>
           </div>
-          <div class="booking-details">
-            <span>👤 ${b.player_name}</span>
-            <span>📅 ${b.date.split('T')[0]}</span>
-            <span>⏰ ${b.time_slot}</span>
-            <span>⏱ ${b.duration} ساعة</span>
-            <span>💰 ${b.total} ر.س</span>
+          <div class="admin-booking-actions">
+            <button class="btn-outline btn-sm" onclick="viewBooking(${b.id})">التفاصيل</button>
+            ${b.status === 'pending' ? `
+              <button class="btn-success btn-sm" onclick="changeBookingStatus(${b.id}, 'confirmed')">✓ قبول</button>
+              <button class="btn-danger btn-sm" onclick="changeBookingStatus(${b.id}, 'rejected')">✗ رفض</button>` : ''}
           </div>
-        </div>
-        <div class="admin-booking-actions">
-          <button class="btn-outline btn-sm" onclick="viewBooking(${b.id})">التفاصيل</button>
-          ${b.status === 'pending' ? `
-            <button class="btn-success btn-sm" onclick="changeBookingStatus(${b.id}, 'confirmed')">✓ قبول</button>
-            <button class="btn-danger btn-sm" onclick="changeBookingStatus(${b.id}, 'rejected')">✗ رفض</button>
-          ` : ''}
-        </div>
-      </div>
-    `).join('');
-
-  } catch (error) {
-    console.error('خطأ في تحميل الحجوزات:', error);
-    showToast('خطأ في تحميل الحجوزات', 'error');
-  }
-}
-
-function filterBookings(filter, btn) {
-  bookingFilter = filter;
-  document.querySelectorAll('.booking-filters .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAdminBookings(filter);
-}
-
-async function changeBookingStatus(id, status) {
-  try {
-    const data = await apiRequest(`/bookings/${id}/status`, 'PUT', { status });
-    if (data.success) {
-      const message = status === 'confirmed' ? 'تم قبول الحجز' : 'تم رفض الحجز';
-      showToast(message, 'success');
-      await renderAdminBookings(bookingFilter);
-      await updateDashboard();
+        </div>`).join('');
     }
-  } catch (error) {
-    console.error('خطأ:', error);
-    showToast('خطأ في تحديث الحجز', 'error');
-  }
-}
 
-function viewBooking(id) {
-  const b = window.allBookings.find(b => b.id === id);
-  if (!b) return;
+    function filterBookings(filter, btn) {
+      bookingFilter = filter;
+      document.querySelectorAll('.booking-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAdminBookings(filter);
+    }
 
-  document.getElementById('bookingDetailContent').innerHTML = `
-    <div class="detail-grid">
-      <div class="detail-row"><span>الملعب:</span><strong>${b.name}</strong></div>
-      <div class="detail-row"><span>اللاعب:</span><strong>${b.player_name}</strong></div>
-      <div class="detail-row"><span>التاريخ:</span><strong>${b.date}</strong></div>
-      <div class="detail-row"><span>الوقت:</span><strong>${b.time_slot}</strong></div>
-      <div class="detail-row"><span>المدة:</span><strong>${b.duration} ساعة</strong></div>
-      <div class="detail-row total"><span>الإجمالي:</span><strong>${b.total} ر.س</strong></div>
-      <div class="detail-row"><span>الحالة:</span><span class="booking-status status-${b.status}">${statusLabel(b.status)}</span></div>
-    </div>
-  `;
+    async function changeBookingStatus(id, status) {
+      const data = await apiRequest(`/bookings/${id}/status`, 'PUT', { status });
+      if (data.success) {
+        showToast(status === 'confirmed' ? 'تم قبول الحجز' : 'تم رفض الحجز', 'success');
+        await renderAdminBookings(bookingFilter);
+        await updateDashboard();
+      }
+    }
 
-  document.getElementById('bookingDetailActions').innerHTML = b.status === 'pending' ? `
-    <button class="btn-secondary" onclick="closeModal('bookingDetailModal')">إغلاق</button>
-    <button class="btn-success" onclick="changeBookingStatus(${b.id},'confirmed'); closeModal('bookingDetailModal')">قبول</button>
-    <button class="btn-danger" onclick="changeBookingStatus(${b.id},'rejected'); closeModal('bookingDetailModal')">رفض</button>
-  ` : `<button class="btn-primary btn-full" onclick="closeModal('bookingDetailModal')">إغلاق</button>`;
+    function viewBooking(id) {
+      const b = window.allBookings.find(b => b.id === id);
+      if (!b) return;
+      document.getElementById('bookingDetailContent').innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-row"><span>الملعب:</span><strong>${b.name}</strong></div>
+          <div class="detail-row"><span>اللاعب:</span><strong>${b.player_name}</strong></div>
+          <div class="detail-row"><span>التاريخ:</span><strong>${b.date.split('T')[0]}</strong></div>
+          <div class="detail-row"><span>الوقت:</span><strong>${b.time_slot}</strong></div>
+          <div class="detail-row"><span>المدة:</span><strong>${b.duration} ساعة</strong></div>
+          <div class="detail-row total"><span>الإجمالي:</span><strong>${b.total} ر.س</strong></div>
+          <div class="detail-row"><span>الحالة:</span><span class="booking-status status-${b.status}">${statusLabel(b.status)}</span></div>
+        </div>`;
+      document.getElementById('bookingDetailActions').innerHTML = b.status === 'pending' ? `
+        <button class="btn-secondary" onclick="closeModal('bookingDetailModal')">إغلاق</button>
+        <button class="btn-success" onclick="changeBookingStatus(${b.id},'confirmed'); closeModal('bookingDetailModal')">قبول</button>
+        <button class="btn-danger" onclick="changeBookingStatus(${b.id},'rejected'); closeModal('bookingDetailModal')">رفض</button>
+      ` : `<button class="btn-primary btn-full" onclick="closeModal('bookingDetailModal')">إغلاق</button>`;
+      document.getElementById('bookingDetailModal').classList.remove('hidden');
+    }
 
-  document.getElementById('bookingDetailModal').classList.remove('hidden');
-}
-
-// ========================================
-// دوال مساعدة (Helper Functions)
-// ========================================
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-}
-
-function logout() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('currentUser');
-  window.location.href = 'index.html';
-}
-
-function statusLabel(s) {
-  return {
-    pending: 'قيد المراجعة',
-    confirmed: 'مؤكد',
-    cancelled: 'ملغي',
-    rejected: 'مرفوض'
-  }[s] || s;
-}
-
-// ========================================
-// API Functions (من app.js)
-// ========================================
-// تأكد من أن هذه الدوال موجودة في app.js:
-// - apiRequest()
-// - getFields()
-// - showToast()
-</script>
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function logout() { localStorage.removeItem('token'); localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+    function statusLabel(s) { return { pending:'قيد المراجعة', confirmed:'مؤكد', cancelled:'ملغي', rejected:'مرفوض' }[s] || s; }
+  </script>
 </body>
 </html>
