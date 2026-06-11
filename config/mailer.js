@@ -10,8 +10,9 @@ const transporter = nodemailer.createTransport({
 
 // ✅ اختبار الاتصال
 transporter.verify((err, success) => {
-    if (err) console.log('Email error:', err.message);
-    else console.log('Email ready ✅');
+    if (err) {console.log('Email error:', err.message);
+    console.log('Full error:', JSON.stringify(err));
+    }else console.log('Email ready ✅');
     
 });console.log("EMAIL_USER =", process.env.EMAIL_USER);
 console.log("EMAIL_PASS exists =", !!process.env.EMAIL_PASS);
