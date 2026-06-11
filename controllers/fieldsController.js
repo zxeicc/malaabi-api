@@ -69,7 +69,7 @@ const updateField = async (req, res) => {
 };
 
 // PUT — تعديل ملعب
-const updateField = async (req, res) => {
+/*const updateField = async (req, res) => {
   const { name, location, price_per_hour, type, capacity, rating, available, color, timeSlots } = req.body;
   try {
     await db.query(
@@ -90,7 +90,7 @@ const updateField = async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
-};
+};*/
 
 // DELETE — حذف ملعب
 const deleteField = async (req, res) => {
